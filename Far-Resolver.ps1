@@ -186,7 +186,12 @@ while($while1){
                     1{
                         write-host ""
                         write-host "Actualizando Far-Resolver" -ForegroundColor Yellow
-                        
+                        Invoke-WebRequest "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Resolver.ps1" -OutFile "temp.ps1"
+                        if($?){
+                            Remove-Item "Far-Resolver.ps1"
+                            Rename-Item "temp.ps1" "Far-Resolver.ps1"
+                            write-host "Actualizacion completada correctamente" -ForegroundColor Green
+                        }
                     }
                     2{
 
