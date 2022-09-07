@@ -1,7 +1,7 @@
 #Far Resolver 1.0
 # Header  ##########################
 Clear-Host
-$ver = "0.1.1"
+$ver = "0.1.2"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
