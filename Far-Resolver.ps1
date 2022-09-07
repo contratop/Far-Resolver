@@ -1,7 +1,7 @@
 #Far Resolver 1.0
 # Header  ##########################
 Clear-Host
-$ver = "0.1"
+$ver = "0.1.1"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -70,7 +70,7 @@ else{
     Write-host "Git OK" -ForegroundColor Green
 }
 ""
-if(-not(Get-Command winget)){
+if(-not(Get-Command winget -ErrorAction SilentlyContinue)){
     Write-Warning "Winget not detected"
     $errorcounter = +1
 }
@@ -107,6 +107,8 @@ $while1 = $true
 while($while1){
     clear-host
     Write-host "Far-Resolver Console Version $ver"
+    if(-not($errorcounter -eq 0)){Write-Warning "Ejecutandose con errores de integridad"}
+    if($gettedGUI){Write-host "Ultimo plugin ejecutado: $gettedGUI"}
     write-host ""
     if($countps1.count -eq 0){
         Write-Warning "No hay plugins disponibles"
@@ -163,7 +165,8 @@ while($while1){
         }
 
         1{
-            write-host "Winget Installer Work in progress"
+            # WINDOWS REPAIR WORK IN PROGRESS ##################################################
+            write-host "Windows Repair Work in progress"
             Start-Sleep -s 2
         }
 
