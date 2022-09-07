@@ -176,7 +176,7 @@ while($while1){
                 write-host "-------------------------------------------"
                 write-host ""
                 write-host "[1] Actualizar Far-Resolver Modulo Inicial"
-                write-host "[2] Actualizar / Descargar lista de plugins"
+                write-host "[2] Git Clone (Full Redownload Far-Resolver)"
                 write-host "[3] Instalar Winget"
                 write-host "[4] Instalar Git"
                 write-host ""
@@ -197,10 +197,18 @@ while($while1){
                         }
                     }
                     2{
-
+                        if(-not(get-command git)){
+                            write-warning "No esta disponible Git, no se puede descargar la lista de plugins"
+                        }
+                        else{
+                            write-host "Descargando repositorio..."
+                            Set-Location ..
+                            git clone htts://github.com/contratop/Far-Resolver
+                            write-host "Descarga finalizada" -ForegroundColor Green
+                        }
                     }
                     3{
-
+                        
                     }
                     4{
 
