@@ -192,6 +192,9 @@ while($while1){
                             Rename-Item "temp.ps1" "Far-Resolver.ps1"
                             write-host "Actualizacion completada correctamente" -ForegroundColor Green
                         }
+                        else{
+                            Write-Warning "Error al actualizar"
+                        }
                     }
                     2{
 
