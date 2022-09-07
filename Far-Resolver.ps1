@@ -198,6 +198,8 @@ while($while1){
                         else{
                             Write-Warning "Error al actualizar"
                         }
+                        ""
+                        pause
                     }
                     2{
                         if(-not(get-command git -ErrorAction SilentlyContinue)){
@@ -209,6 +211,8 @@ while($while1){
                             git clone "htts://github.com/contratop/Far-Resolver"
                             write-host "Descarga finalizada" -ForegroundColor Green
                         }
+                        ""
+                        pause
                     }
                     3{
                         if(Get-Command winget -ErrorAction SilentlyContinue){
