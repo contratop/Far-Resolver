@@ -1,7 +1,7 @@
 #Far Resolver 1.0
 # Header  ##########################
 Clear-Host
-$ver = "0.1.3"
+$ver = "0.1.4"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -259,6 +259,36 @@ while($while1){
                                         Start-Sleep -s 5
                                     }
                                 }
+                                if(-not(test-path -path "mui64.appx")){
+                                    Write-host "Descargando mui64.appx..."
+                                    Invoke-WebRequest -uri "https://github.com/contratop/Sources/raw/main/far_data/mui64.Appx" -OutFile "mui64.appx"
+                                    if(-not($?)){
+                                        Write-Warning "Error en la descarga"
+                                        Write-host "Instalando Winget de todas formas"
+                                    }
+                                    else {
+                                        Add-AppPackage "mui64.appx"
+                                        if($?){
+                                            write-host "Mui64 Instalado Correctamente" -ForegroundColor Green
+                                        }
+                                        else{
+                                            Write-Warning "Error al instalar Mui" 
+                                            Write-host "Se intentara instalar Winget de todas formas"
+                                            Start-Sleep -s 5
+                                        }
+                                    }
+                                }
+                                elseif(Test-Path -path "mui64.appx"){
+                                    Add-AppxPackage "mui64.appx"
+                                    if($?){
+                                        write-host "Mui64 Instalador Correctamente" -ForegroundColor Green
+                                    }
+                                    else{
+                                        Write-host "Error al instalar Mui" -ForegroundColor Yellow
+                                        Write-host "Se intentara instalar Winget de todas formas"
+                                        Start-Sleep -s 5
+                                    }
+                                }
                             }
                             else{
                                 if(-not(test-path -path "marcos86.Appx")){
@@ -289,6 +319,36 @@ while($while1){
                                         Write-host "Error al instalar marcos" -ForegroundColor Yellow
                                         write-host "Se intentara instalar Winget de todas formas"
                                         Start-Sleep -s 5
+                                    }
+                                }
+                                if(-not(test-path -path "mui86.appx")){
+                                    Write-host "Descargando mui86.appx"
+                                    Invoke-WebRequest -uri "https://github.com/contratop/Sources/raw/main/far_data/mui86.appx" -OutFile "mui86.appx"
+                                    if(-not($?)){
+                                        Write-host "Error en la descarga"
+                                        Write-host "Instalando Winget de todas formas"
+                                    }
+                                    else{
+                                        Add-AppPackage "mui86.appx"
+                                        if($?){
+                                            write-host "Mui86 instalado correctamente" -ForegroundColor Green
+                                        }
+                                        else{
+                                            Write-Warning "Error al instalar Mui"
+                                            Write-Host "Se intentara instalar Winget de todas formas"
+                                            start-sleep -s 5
+                                        }
+                                    }
+                                }
+                                elseif(test-path -path "mui86-appx"){
+                                    Add-AppPackage "mui86.appx"
+                                    if($?){
+                                        write-host "Mui86 instalado correctamente" -ForegroundColor Green
+                                    }
+                                    else{
+                                        Write-Warning "Error al instalar Mui"
+                                        Write-Host "Se intentara instalar Winget de todas formas"
+                                        start-sleep -s 5
                                     }
                                 }
                             }
