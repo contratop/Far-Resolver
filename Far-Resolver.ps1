@@ -1,7 +1,7 @@
 #Far Resolver 1.0
 # Header  ##########################
 Clear-Host
-$ver = "0.1.2"
+$ver = "0.1.3"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -194,6 +194,8 @@ while($while1){
                             Remove-Item "Far-Resolver.ps1"
                             Rename-Item "temp.ps1" "Far-Resolver.ps1"
                             write-host "Actualizacion completada correctamente" -ForegroundColor Green
+                            Write-host "Vuelva a ejecutar Far-Resolver"
+                            exit
                         }
                         else{
                             Write-Warning "Error al actualizar"
