@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.3"
+$farlibraryver = "0.3.1"
 
 
 
@@ -26,14 +26,14 @@ function individualrepair{
             1{# OPCION 1 INDIVID ####
                 write-host ""
                 write-host "Checking winget..."
-                if(-not(Get-Command winget)){
+                if(-not(Get-Command winget -ErrorAction SilentlyContinue)){
                     write-warning "No se ha detectado Winget o no esta funcionando correctamente"
                     write-host "Reparando Winget... (Invoke wingetupgrade)"
                     wingetupgrade
                     write-host "Operacion completada" -ForegroundColor Cyan
                     pause
                 }
-                elseif(Get-Command winget){
+                elseif(Get-Command winget -ErrorAction SilentlyContinue){
                     write-host "Winget esta funcionando correctamnete" -ForegroundColor Green
                     Start-Sleep -s 3
                 }
@@ -46,7 +46,7 @@ function individualrepair{
             2{
                 write-host ""
                 Write-host "Checking Windows Defender..."
-                if(-not(Get-Command Get-MpComputerStatus)){
+                if(-not(Get-Command Get-MpComputerStatus -ErrorAction SilentlyContinue)){
                     Write-Warning "No se puede tener acceso a Windows Defender"
                     Pause
                 }
@@ -180,7 +180,7 @@ function windowsrepair{# WINDOWS REPAIRER ######################################
     "Far-Resolver Registro de reparacion" >> Far-Resolver-log.txt # LOG
     ################ FASE 1 (WingetCheck) #################
     write-host "Comprobando Winget"
-    if(-not(Get-Command winget)){
+    if(-not(Get-Command winget -ErrorAction SilentlyContinue)){
         "Winget no esta presente en el sistema y se procede a ejecutar wingetupgrade" >> Far-Resolver-log.txt # LOG
         Write-Warning "Winget no esta disponible o presenta problemas"
         Write-host "Ejecutando Winget Upgrade de Far-Library..."
@@ -202,7 +202,7 @@ function windowsrepair{# WINDOWS REPAIRER ######################################
     "" >> Far-Resolver-log.txt # LOG
     Write-host "Comprobando estado de Windows defender..."
     "Comprobacion de estado de Windows Defender" >> Far-Resolver-log.txt # LOG
-    if(-not(Get-Command Get-MpComputerStatus)){
+    if(-not(Get-Command Get-MpComputerStatus -ErrorAction SilentlyContinue)){
         "No existe el comando Get-MpComputerStatus" >> Far-Resolver-log.txt # LOG
         Write-Warning "No se tiene acceso al estado de Windows Defender"
         Start-Sleep -s 5
@@ -259,7 +259,7 @@ function windowsrepair{# WINDOWS REPAIRER ######################################
     ""
     "" >> Far-Resolver-log.txt # LOG
     ######### FASE 3 (Escaneo DISM y SFC) ################
-    if(-not(Get-Command dism)){
+    if(-not(Get-Command dism -ErrorAction SilentlyContinue)){
         "dism command not found" >> Far-Resolver-log.txt # LOG
         Write-Warning "Dism no esta disponible en este sistema"
     }
@@ -331,7 +331,7 @@ function windowsrepair{# WINDOWS REPAIRER ######################################
     ""
     "" >> Far-Resolver-log.txt # LOG
     ############# FASE 4 (MRT) ################
-    if(Get-Command MRT.exe){
+    if(Get-Command MRT -ErrorAction SilentlyContinue){
         write-host "Comprobado anomalias en las definiciones estandar de Windows..."
         "executing: start-process mrt.exe -wait" >> Far-Resolver-log.txt # LOG
         Start-Process mrt.exe -Wait
