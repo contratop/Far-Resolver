@@ -1,5 +1,160 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.2.1"
+$farlibraryver = "0.3"
+
+
+
+function individualrepair{
+    $whilelib1 = $true
+    while($whilelib1){
+        Clear-Host
+        write-host "Far-Resolver Individual Repair"
+        write-host "-------------------------------------------"
+        write-host ""
+        write-host "Menu Individual"
+        write-host ""
+        write-host "[1] Winget Check"
+        write-host "[2] Windows Defender Check"
+        write-host "[3] DISM / SFC Check"
+        write-host "[4] MRT"
+        write-host "[5] SigVerif"
+        write-host "[6] perfmon"
+        write-host "[7] CHKDSK"
+        write-host ""
+        write-host "[x] Volver"
+        $menuoption = read-host "Selecciona una opcion"
+        switch($menuoption){
+            1{# OPCION 1 INDIVID ####
+                write-host ""
+                write-host "Checking winget..."
+                if(-not(Get-Command winget)){
+                    write-warning "No se ha detectado Winget o no esta funcionando correctamente"
+                    write-host "Reparando Winget... (Invoke wingetupgrade)"
+                    wingetupgrade
+                    write-host "Operacion completada" -ForegroundColor Cyan
+                    pause
+                }
+                elseif(Get-Command winget){
+                    write-host "Winget esta funcionando correctamnete" -ForegroundColor Green
+                    Start-Sleep -s 3
+                }
+                else{
+                    Write-Warning "Excepcion no controlada (desbordamiento de codigo)"
+                    pause
+                }
+                #################################
+            }
+            2{
+                write-host ""
+                Write-host "Checking Windows Defender..."
+                if(-not(Get-Command Get-MpComputerStatus)){
+                    Write-Warning "No se puede tener acceso a Windows Defender"
+                    Pause
+                }
+                else{
+                    if((Get-MpComputerStatus).AntivirusEnabled){
+                        write-host "Servicio antivirus funcionando correctamente" -ForegroundColor Green
+                    }
+                    else{
+                        Write-Warning "Servicio antivirus no responde"
+                    }
+                    if((Get-MpComputerStatus).AntiSpywareEnabled){
+                        Write-host "Servicio antispyware funcionando correcatamente" -ForegroundColor Green
+                    }
+                    else{
+                        Write-Warning "Servicio antispyware no responde"
+                    }
+                    if((Get-MpComputerStatus).AntispywareEnabled){
+                        Write-host "Servicio AntiSpyware funcionando correctamente" -ForegroundColor Green
+                    }
+                    else{
+                        Write-Warning "Servicio AntiSpyware no responde"
+                    }
+                    if((Get-MpComputerStatus).BehaviorMonitorEnabled){
+                        Write-host "Servicio de proteccion contra alteraciones funcionando correctamente" -ForegroundColor Green
+                    }
+                    else{
+                        Write-Warning "Servicio de proteccion contra alteraciones no responde"
+                    }
+                }
+                Write-host "Operacion completada" -ForegroundColor Green
+                pause
+
+            }
+            3{
+                write-host ""
+                write-host "DISM / SFC Checking..."
+                write-host "Reparando integridad dle sistema (1/4)"
+                # Unificado de momento #
+                DISM /Online /Cleanup-Image /CheckHealth
+                DISM /Online /Cleanup-Image /ScanHealth
+                DISM /Online /Cleanup-Image /RestoreHealth
+                sfc /scannow
+                write-host "Operacion completada" -ForegroundColor Green
+                pause
+            }
+            4{
+                Write-host ""
+                write-host "Ejecutando MRT..."
+                Start-Process mrt.exe
+                write-host "Operacion completada" -ForegroundColor Green
+                Pause
+            }
+            5{
+                Write-host ""
+                write-host "Ejecutando SigVerif"
+                Start-Process sigverif.exe
+                write-host "Operacion completada" -ForegroundColor Green
+                pause
+            }
+            6{
+                write-host ""
+                write-host "Ejecutando Perfmon"
+                Start-Process perfmon.exe /rel
+                write-host "Operacion completada" -ForegroundColor Green
+                pause
+            }
+            7{
+                write-host ""
+                write-host "El analisis de disco CHKDSK requiere reinicio del sistema"
+                write-host "Prodeciendo en 10 segundos"
+                write-host "para abortar, CTRL + C"
+                Start-Sleep -s 10
+                write-host "Realizando analisis de disco C:"
+                chkdsk c: /f /r /x
+                write-host "Operacion completada"
+                pause
+            }
+
+
+
+            x{
+                Clear-Host
+                $whilelib1 = $false
+            }
+
+
+            ####### DEFAULT ZONE ##########
+            default{
+                Write-Warning "Opcion no valida"
+                start-sleep -s 5
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -17,11 +172,11 @@ function FarLibraryVersion{# FAR LIBRARY VERSION PRINT #########################
 
 
 
-function windowsrepair{
+function windowsrepair{# WINDOWS REPAIRER ###################################################################
     write-host "Windows Repairer" -ForegroundColor Blue
     write-host "------------------------------"
     write-host ""
-    write-host "Registrando enventos en Far-Resolver-log.txt"
+    write-host "Registrando eventos en Far-Resolver-log.txt"
     "Far-Resolver Registro de reparacion" >> Far-Resolver-log.txt # LOG
     ################ FASE 1 (WingetCheck) #################
     write-host "Comprobando Winget"
@@ -228,6 +383,7 @@ function windowsrepair{
     }
     ""
     "" >> Far-Resolver-log.txt # LOG
+    ##### FASE 7 (chkdsk) #########
     "prompt for chkdsk" >> Far-Resolver-log.txt # LOG
     write-host "Deseas reparar ahora la unidad de disco C:?"
     write-host "Esta operacion requiere el reincio del sistema"

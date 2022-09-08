@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.2.1.4"
+$ver = "0.2.2"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -159,6 +159,7 @@ while($while1){
         write-host "[P] Plugins Launcher" -ForegroundColor Magenta
     }
     Write-host "[1] Windows Repair" -ForegroundColor Cyan
+    write-host "[2] Reparacion individual" -ForegroundColor Cyan
     write-host ""
     write-host "[A] Actualizar/Obtener" -ForegroundColor Yellow
     write-host ""
@@ -211,6 +212,11 @@ while($while1){
                 Write-host "Operacion no confirmada"
                 Start-Sleep -s 4
             }
+        }
+
+        2{
+            Clear-Host
+            individualrepair
         }
 
         a{
