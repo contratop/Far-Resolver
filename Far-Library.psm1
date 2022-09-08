@@ -1,5 +1,6 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.3.1"
+$farlibraryver = "0.3.2"
+$script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
 
 
