@@ -231,9 +231,7 @@ while($while1){
                         if($?){
                             Remove-Item "Far-Resolver.ps1"
                             Rename-Item "temp.ps1" "Far-Resolver.ps1"
-                            write-host "Actualizacion completada correctamente" -ForegroundColor Green
-                            Write-host "Vuelva a ejecutar Far-Resolver"
-                            exit
+                            write-host "Far-Resolver actualizado" -ForegroundColor Green
                         }
                         else{
                             Write-Warning "Error al actualizar"
@@ -245,6 +243,7 @@ while($while1){
                         if($?){
                             Remove-Item "Far-Library.psm1"
                             Rename-Item "temp.psm1" "Far-Library.psm1"
+                            Write-host "Far-Library actualizado" -ForegroundColor Green
                             Write-host "Actualizacion finalizada" -ForegroundColor Green
                             write-host "Reinicie Far-Resolver"
                             exit
