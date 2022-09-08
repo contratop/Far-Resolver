@@ -28,7 +28,7 @@ if(-not(test-path -path "Far-Library.psm1")){
     Write-host "Descargando..."
     Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "Far-Library.psm1"
     if($?){
-        Import-Module "Far-Library.psm1"
+        Import-Module .\Far-Library.psm1
     }
     else{
         Write-Warning "Ha ocurrido un error al descargar Far-Library"
@@ -38,7 +38,7 @@ if(-not(test-path -path "Far-Library.psm1")){
     }
 }
 else{
-    Import-Module "Far-Library.psm1"
+    Import-Module .\Far-Library.psm1
 }
 
 
