@@ -1,7 +1,7 @@
 #Far Resolver 1.0
 # Header  ##########################
 Clear-Host
-$ver = "0.1.4"
+$ver = "0.1.5"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -127,6 +127,8 @@ $while1 = $true
 while($while1){
     clear-host
     Write-host "Far-Resolver Console Version $ver"
+    if(-not(Get-Module Far-Library)){Write-Warning "Modulo Far-Library no cargado"}
+    else{FarLibraryVersion}
     if(-not($errorcounter -eq 0)){Write-Warning "Ejecutandose con errores de integridad"}
     if($gettedGUI){Write-host "Ultimo plugin ejecutado: $gettedGUI"}
     write-host ""

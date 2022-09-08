@@ -1,4 +1,20 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
+$farlibraryver = "0.1"
+
+
+
+
+
+
+
+
+
+
+function FarLibraryVersion{
+    Write-host "Far-Library Version $farlibraryver" -ForegroundColor Green
+}
+
+
 
 
 
