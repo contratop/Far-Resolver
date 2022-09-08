@@ -26,14 +26,14 @@ write-host "Far-Resolver Integrity Check:"
 if(-not(test-path -path "Far-Library.psm1")){
     Write-Warning "Falta Far-Library"
     Write-host "Descargando..."
-    Invoke-WebRequest -uri "https://github.com/contratop/Far-Resolver/blob/4de068aef6490ecb28f5649c76229696bae4a73b/Far-Library.psm1" -OutFile "Far-Library.psm1"
+    Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "Far-Library.psm1"
     if($?){
         Import-Module "Far-Library.psm1"
     }
     else{
         Write-Warning "Ha ocurrido un error al descargar Far-Library"
         Write-host "Descarguelo manualmente"
-        write-host "https://github.com/contratop/Far-Resolver/blob/4de068aef6490ecb28f5649c76229696bae4a73b/Far-Library.psm1"
+        write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
         exit
     }
 }
