@@ -165,9 +165,12 @@ while($while1){
         }
 
         1{
-            # WINDOWS REPAIR WORK IN PROGRESS ##################################################
-            write-host "Windows Repair Work in progress"
+            Clear-host
+            Write-host "Windows Repair"
             Start-Sleep -s 2
+            write-host ""
+            Write-host "Comprobando instalacion de Winget..."
+            # WINDOWS REPAIRER WORKM IN PROGRESS #################
         }
 
         a{
