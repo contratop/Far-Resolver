@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.2.0.0"
+$ver = "0.2.1.0"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -215,7 +215,7 @@ while($while1){
                 write-host "Version de Far-Library $farlibraryver"
                 write-host "-------------------------------------------"
                 write-host ""
-                write-host "[1] Actualizar Far-Resolver Modulo Inicial"
+                write-host "[1] Actualizar Far-Resolver (Modulo principal y Library)"
                 write-host "[2] Git Clone (Full Redownload Far-Resolver)"
                 write-host "[3] Instalar Winget"
                 write-host "[4] Instalar Git"
@@ -237,6 +237,23 @@ while($while1){
                         }
                         else{
                             Write-Warning "Error al actualizar"
+                        }
+                        Remove-Module Far-Library
+                        clear-host
+                        Write-host "Actualizando Far-Library..."
+                        Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "temp.psm1"
+                        if($?){
+                            Remove-Item "Far-Library.psm1"
+                            Rename-Item "temp.psm1" "Far-Library.psm1"
+                            Write-host "Actualizacion finalizada" -ForegroundColor Green
+                            write-host "Reinicie Far-Resolver"
+                            exit
+                        }
+                        else{
+                            Write-Warning "Ha ocurrido un error al descargar Far-Library"
+                            Write-host "Descarguelo manualmente"
+                            write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
+                            pause
                         }
                         ""
                         pause
