@@ -191,12 +191,18 @@ while($while1){
         }
 
         1{
-            Clear-host
-            Write-host "Windows Repair"
-            Start-Sleep -s 2
-            write-host ""
-            Write-host "Comprobando instalacion de Winget..."
-            # WINDOWS REPAIRER WORK IN PROGRESS ##############################################################
+            Write-Warning "Esta operacion puede durar mucho tiempo"
+            $continue = Read-Host "Si estas seguro de proceder, escribe [repairstart]"
+            if($continue -eq "repairstart"){
+                Clear-host
+                windowsrepair
+                exit
+            }
+            else{
+                Write-host "Operacion no confirmada"
+                Start-Sleep -s 4
+            }
+
         }
 
         a{
