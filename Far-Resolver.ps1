@@ -39,6 +39,9 @@ if(-not(test-path -path "Far-Library.psm1")){
 }
 else{
     Import-Module .\Far-Library.psm1
+    if(-not($?)){
+        Write-Warning "El modulo Far-Library no ha cargado"
+    }
 }
 
 
