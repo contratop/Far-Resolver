@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.1.5.4"
+$ver = "0.1.5.5"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -96,7 +96,7 @@ else{
 ""
 if(-not(Get-Command winget -ErrorAction SilentlyContinue)){
     Write-Warning "Winget not detected"
-    $errorcounter = +1
+    $errorcounter =+ 1
 }
 else{
     write-host "Winget OK" -ForegroundColor Green
