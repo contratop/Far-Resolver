@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.2.1.1"
+$ver = "0.2.1.2"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -42,6 +42,7 @@ else{
     Import-Module .\Far-Library.psm1
     if(-not($?)){
         Write-Warning "El modulo Far-Library no ha cargado"
+        $errorcounter = $errorcounter + 1
     }
 }
 
@@ -50,7 +51,7 @@ else{
 if(-not($OSVersion -match "Windows")){ # Check OS
     Write-host "Sistema Operativo $OSVersion"
     Write-Warning "No se detecta O.S Windows"
-    $errorcounter =+ 1
+    $errorcounter = $errorcounter + 1
 }
 else{
     Write-host "Sistema Operativo $OSVersion"
@@ -60,7 +61,7 @@ else{
 if(-not($architectureproc -match "64")){ # Check Bits
     Write-host "Arquitectura CPU: $architectureproc"
     Write-Warning "64 Bits CPU Not detected"
-    $errorcounter =+ 1
+    $errorcounter = $errorcounter + 1
 }
 else{
     Write-host "Arquitectuta CPU: $architectureproc"
@@ -73,7 +74,7 @@ else{
 # Directory Parse ################################
 if(-not(test-path -path plugins)){ # Check Plugins Dir
     Write-Warning "Plugins Folder not found"
-    $errorcounter =+ 1
+    $errorcounter = $errorcounter + 1
 }
 else{
     $countps1 = Get-ChildItem plugins\*.ps1 -Recurse -File | Measure-Object | Select-Object Count
@@ -88,7 +89,7 @@ else{
 # Command Parse #####################################
 if(-not(Get-Command git -ErrorAction SilentlyContinue)){
     Write-Warning "Git not installed"
-    $errorcounter =+ 1
+    $errorcounter = $errorcounter + 1
 }
 else{
     Write-host "Git OK" -ForegroundColor Green
@@ -96,7 +97,7 @@ else{
 ""
 if(-not(Get-Command winget -ErrorAction SilentlyContinue)){
     Write-Warning "Winget not detected"
-    $errorcounter =+ 1
+    $errorcounter = $errorcounter + 1
 }
 else{
     write-host "Winget OK" -ForegroundColor Green

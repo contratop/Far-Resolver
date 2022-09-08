@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.2"
+$farlibraryver = "0.2.1"
 
 
 
@@ -62,7 +62,7 @@ function windowsrepair{
         else{
             write-host "EXCEPTION: Get-MpComputerStatus.AntivirusEnabled =" ((Get-MpComputerStatus).AntivirusEnabled) >> Far-Resolver-log.txt # LOG
             Write-Warning "El servicio antivirus no responde"
-            $defendererrors =+ 1
+            $defendererrors = $defendererrors + 1
         }
         if((Get-MpComputerStatus).AntispywareEnabled){
             write-host "Get-MpComputerStatus.AntiSpywareEnabled =" ((Get-MpComputerStatus).AntispywareEnabled) >> Far-Resolver-log.txt # LOG
@@ -71,7 +71,7 @@ function windowsrepair{
         else{
             write-host "EXCEPTION: Get-MpComputerStatus.AntiSpywareEnabled =" ((Get-MpComputerStatus).AntiSpywareEnabled) >> Far-Resolver-log.txt # LOG
             Write-Warning "El servicio AntiSpyware no responde"
-            $defendererrors =+ 1
+            $defendererrors = $defendererrors + 1
         }
         if((Get-MpComputerStatus).BehaviorMonitorEnabled){
             write-host "Get-MpComputerStatus.BehaviorMonitorEnabled =" ((Get-MpComputerStatus).BehaviorMonitorEnabled) >> Far-Resolver-log.txt # LOG
@@ -80,7 +80,7 @@ function windowsrepair{
         else{
             write-host "EXCEPTION: Get-MpComputerStatus.BehaviorMonitorEnabled =" ((Get-MpComputerStatus).BehaviorMonitorEnabled) >> Far-Resolver-log.txt # LOG
             Write-Warning "El servicio de proteccion contra alteraciones no esta respondiendo"
-            $defendererrors =+ 1
+            $defendererrors = $defendererrors + 1
         }
         if((Get-MpComputerStatus).RealTimeProtectionEnabled){
             write-host "Get-MpComputerStatus.RealTimeProtectionEnabled =" ((Get-MpComputerStatus).RealTimeProtectionEnabled) >> Far-Resolver-log.txt # LOG
@@ -89,7 +89,7 @@ function windowsrepair{
         else{
             write-host "EXCEPTION: Get-MpComputerStatus.RealTimeProtectionEnabled =" ((Get-MpComputerStatus).RealTimeProtectionEnabled) >> Far-Resolver-log.txt # LOG
             Write-Warning "El servicio de proteccion a tiempo real no esta respondiendo"
-            $defendererrors =+ 1
+            $defendererrors = $defendererrors + 1
         }
         if($defendererrors -eq 0){
             "defendererrors = 0" >> Far-Resolver-log.txt # LOG
@@ -121,7 +121,7 @@ function windowsrepair{
         else{
             "dism checkhealth exception exit code" >> Far-Resolver-log.txt # LOG
             Write-Warning "Error o anomalia en la fase 1. continuando..."
-            $integrityerror =+ 1
+            $integrityerror = $integrityerror + 1
         }
         # Reparacion fase 2 #
         Write-host "Reparando integridad del sistema (fase 2/4)"
@@ -134,7 +134,7 @@ function windowsrepair{
         else{
             "dirm scanhealth exception exit code" >> Far-Resolver-log.txt # LOG
             Write-Host "Error o anomalia en la fase 2. continuando..."
-            $integrityerror =+ 1
+            $integrityerror = $integrityerror + 1
         }
         # Reparacion fase 3 #
         Write-host "Reparando integridad del sistema (fase 3/4)"
@@ -147,7 +147,7 @@ function windowsrepair{
         else{
             "dirm RestoreHealth exception exit code" >> Far-Resolver-log.txt # LOG
             Write-Host "Error o anomalia en la fase 3. continuando..."
-            $integrityerror =+ 1
+            $integrityerror = $integrityerror + 1
         } 
         # Reparacion fase 4 #
         Write-host "Reparando integridad del sistema (fase 4/4)"
@@ -160,7 +160,7 @@ function windowsrepair{
         else{
             "sfc exception exit code" >> Far-Resolver-log.txt # LOG
             Write-Warning "Error o anomalia en la fase 4"
-            $integrityerror =+ 1
+            $integrityerror = $integrityerror + 1
         }
     }
     if($integrityerror -eq 0){
