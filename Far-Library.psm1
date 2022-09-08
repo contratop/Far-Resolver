@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.1.2"
+$farlibraryver = "0.2"
 
 
 

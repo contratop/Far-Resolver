@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.1.5.5"
+$ver = "0.2.0.0"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -202,7 +202,8 @@ while($while1){
                 Write-host "Operacion no confirmada"
                 Start-Sleep -s 4
             }
-
+            ""
+            exit
         }
 
         a{
