@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.2.1.2"
+$ver = "0.2.1.3"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -126,6 +126,14 @@ else{
 
 
 
+
+
+
+
+
+
+
+
 # MENU PRINCIPAL #####################################
 
 $while1 = $true
@@ -161,7 +169,7 @@ while($while1){
             Clear-Host
             write-host "Far-Resolver Plugins Launcher" -ForegroundColor Magenta
             write-host "--------------------------------"
-            $gettedGUI = Get-ChildItem plugins | Out-GridView -Title 'Selecciona un script' -OutputMode Single
+            $gettedGUI = Get-ChildItem plugins | Out-GridView -Title 'Plugins Launcher' -OutputMode Single
             if($?){
                 if($null -eq $gettedGUI){
                     Write-Warning "No se ha seleccionado nada o se ha cancelado"
