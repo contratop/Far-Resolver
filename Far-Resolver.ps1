@@ -180,7 +180,7 @@ while($while1){
                     & .\plugins\$gettedGUI
                     if($?){
                         write-host "---------------------------------------------"
-                        Write-host "Scipt ejecutado correctamente" -ForegroundColor Green
+                        Write-host "Plugin ejecutado correctamente" -ForegroundColor Green
                         Write-host "Ultimo plugin ejecutado: $gettedGUI"
                         write-host ""
                         pause
@@ -211,8 +211,6 @@ while($while1){
                 Write-host "Operacion no confirmada"
                 Start-Sleep -s 4
             }
-            ""
-            exit
         }
 
         a{
