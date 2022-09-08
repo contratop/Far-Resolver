@@ -137,7 +137,7 @@ function individualrepair{
             ####### DEFAULT ZONE ##########
             default{
                 Write-Warning "Opcion no valida"
-                start-sleep -s 5
+                start-sleep -s 2
             }
         }
     }
