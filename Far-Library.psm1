@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.1"
+$farlibraryver = "0.1.1"
 
 
 
@@ -186,3 +186,18 @@ function wingetupgrade{
     ""
     pause
 }
+
+
+
+
+
+
+
+
+
+
+
+
+# Export Data
+
+Export-ModuleMember -Variable -Function

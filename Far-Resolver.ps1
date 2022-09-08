@@ -1,7 +1,7 @@
 #Far Resolver 1.0
 # Header  ##########################
 Clear-Host
-$ver = "0.1.5.1"
+$ver = "0.1.5.2"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -204,12 +204,14 @@ while($while1){
                 Clear-Host
                 write-host "Actualizador Far-Resolver" -ForegroundColor Yellow
                 write-host "Version del modulo principal: $ver"
+                write-host "Version de Far-Library $farlibraryver"
                 write-host "-------------------------------------------"
                 write-host ""
                 write-host "[1] Actualizar Far-Resolver Modulo Inicial"
                 write-host "[2] Git Clone (Full Redownload Far-Resolver)"
                 write-host "[3] Instalar Winget"
                 write-host "[4] Instalar Git"
+                write-host "[5] Actualizar Far-Library"
                 write-host ""
                 write-host "[X] Volver a Menu Principal"
                 $option = read-host "Selecciona una opcion"
