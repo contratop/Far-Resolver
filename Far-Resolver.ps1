@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.2.2"
+$ver = "0.3.0"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -145,13 +145,23 @@ while($while1){
     if(-not($errorcounter -eq 0)){Write-Warning "Ejecutandose con errores de integridad"}
     if($gettedGUI){Write-host "Ultimo plugin ejecutado: $gettedGUI"}
     write-host ""
-    if($countps1.count -eq 0){
-        Write-Warning "No hay plugins disponibles"
-        $pluginsenable = 0
+    # Plugins Data Check & Print Data
+    if(test-path -path plugins){
+        if($countps1.count -eq 0){
+            Write-Warning "No hay plugins disponibles"
+            $pluginsenable = 0
+        }
+        else{
+            write-host "Plugins PS1:" $countps1.count "plugins detectados" -ForegroundColor Magenta
+        }
+    }
+    elseif(-not(Test-Path -path plugins)){
+        Write-Warning "No se encuentra la carpeta de plugins"
     }
     else{
-        write-host "Plugins PS1:" $countps1.count "plugins detectados" -ForegroundColor Magenta
+        Write-Warning "Excepcion no controlada al detectar la carpeta de plugins"
     }
+
     write-host ""
     Write-host "Far-Resolver Main Menu"
     write-host "--------------------------------"
@@ -167,36 +177,42 @@ while($while1){
     $mainmenu = read-host "Selecciona una opcion"
     switch($mainmenu){
         p{
-            Clear-Host
-            write-host "Far-Resolver Plugins Launcher" -ForegroundColor Magenta
-            write-host "--------------------------------"
-            $gettedGUI = Get-ChildItem plugins | Out-GridView -Title 'Plugins Launcher' -OutputMode Single
-            if($?){
-                if($null -eq $gettedGUI){
-                    Write-Warning "No se ha seleccionado nada o se ha cancelado"
-                    write-host ""
-                    Pause
-                }
-                else{
-                    & .\plugins\$gettedGUI
-                    if($?){
-                        write-host "---------------------------------------------"
-                        Write-host "Plugin ejecutado correctamente" -ForegroundColor Green
-                        Write-host "Ultimo plugin ejecutado: $gettedGUI"
-                        write-host ""
-                        pause
-                    }
-                    else{
-                        Write-host "El Plugin ha devuelto errores en la ejecuccion"
-                        write-host "Ultimo plugin ejecutado: $gettedGUI"
-                        write-host ""
-                        pause
-                    }
-                }
+            if(-not(Test-Path -path plugins)){
+                Write-Warning "No se encuentra la carpeta de Plugins"
+                Start-Sleep -s 2
             }
             else{
-                Write-Warning "Hay un error la obtener la lista de plugins..."
-                pause
+                Clear-Host
+                write-host "Far-Resolver Plugins Launcher" -ForegroundColor Magenta
+                write-host "--------------------------------"
+                $gettedGUI = Get-ChildItem plugins | Out-GridView -Title 'Plugins Launcher' -OutputMode Single
+                if($?){
+                    if($null -eq $gettedGUI){
+                        Write-Warning "No se ha seleccionado nada o se ha cancelado"
+                        write-host ""
+                        Pause
+                    }
+                    else{
+                        & .\plugins\$gettedGUI
+                        if($?){
+                            write-host "---------------------------------------------"
+                            Write-host "Plugin ejecutado correctamente" -ForegroundColor Green
+                            Write-host "Ultimo plugin ejecutado: $gettedGUI"
+                            write-host ""
+                            pause
+                        }
+                        else{
+                            Write-host "El Plugin ha devuelto errores en la ejecuccion"
+                            write-host "Ultimo plugin ejecutado: $gettedGUI"
+                            write-host ""
+                            pause
+                        }
+                    }
+                }
+                else{
+                    Write-Warning "Hay un error la obtener la lista de plugins..."
+                    pause
+                }
             }
         }
 
