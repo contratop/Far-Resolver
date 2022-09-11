@@ -22,6 +22,7 @@ If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     Exit
 }
 
+
 $errorcounter = 0
 write-host "Far-Resolver Integrity Check:"
 if(-not(test-path -path "Far-Library.psm1")){
