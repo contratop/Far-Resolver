@@ -1,4 +1,4 @@
-#Far Resolver 1.0
+#Far Resolver 1.0 (test commit)
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
