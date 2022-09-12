@@ -86,7 +86,6 @@ else{
 
 
 
-
 # Command Parse #####################################
 if(-not(Get-Command git -ErrorAction SilentlyContinue)){
     Write-Warning "Git not installed"

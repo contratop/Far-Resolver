@@ -2,6 +2,88 @@ Write-host "Far-Library cargado correctamente" -ForegroundColor Green
 $farlibraryver = "0.3.2"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
+# En desarrollo ########################
+function officeinstaller{
+    param($mode)
+    write-host "Se va a proceder a instalar Office" -ForegroundColor Cyan
+    if($mode -eq "classic"){
+
+    }
+    elseif($module -eq "volume"){
+
+    }
+    else{
+        Write-warning "Modo de instalación no válido"
+        write-host "Reportar este error al desarrollador" -ForegroundColor Yellow
+        exit
+    }
+}
+# En desarrollo ########################
+
+
+# En desarrollo ########################
+
+function activarkms{
+    param($mode)
+    write-host "Se va a proceder a activar KMS" -ForegroundColor Cyan
+    if($mode -eq "kms"){
+        clear-host
+        write-host "Asegurate de tener desactivado el antivirus" -ForegroundColor Yellow
+        $continue = read-host "Escribe [continue] para continuar"
+        if($continue -eq "continue"){
+
+        }
+        else{
+            Write-warning "No se ha escrito continue"
+            write-host "Abortando..." -ForegroundColor Yellow
+            exit
+        }
+    }
+    elseif($mode -eq "volume"){
+
+    }
+    else{
+        Write-warning "Modo de instalación no válido"
+        write-host "Reportar este error al desarrollador" -ForegroundColor Yellow
+        exit
+    }
+}
+
+
+# En desarrollo ########################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function individualrepair{
