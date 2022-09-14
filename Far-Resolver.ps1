@@ -365,7 +365,9 @@ while($while1){
         }
 
 
-
+        n{
+            Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/contratop/Far-Resolver/main/onlineplugins.ps1" | Invoke-Expression
+        }
 
         x{
             write-host "Far-resolver finalizado por el usuario (opcion X)" -ForegroundColor Yellow

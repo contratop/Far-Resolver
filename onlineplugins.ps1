@@ -9,7 +9,7 @@ write-host "[1] - winutils (@christitustech)"
 $getplugins = read-host "Escribe el numero del plugin que quieres instalar"
 
 if ($getplugins -eq "1") {
-    Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" | iex
+    Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" | Invoke-Expression
     if($?) {
         write-host "Plugin executado correctamente"
     } else {
