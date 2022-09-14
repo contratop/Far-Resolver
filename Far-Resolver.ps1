@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.3.2"
+$ver = "0.4"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -367,6 +367,10 @@ while($while1){
 
         n{
             Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/contratop/Far-Resolver/main/onlineplugins.ps1" | Invoke-Expression
+            if(-not($?)){
+                Write-Warning "Error de ejecucion"
+            }
+            pause
         }
 
         x{

@@ -1,5 +1,6 @@
 
-
+$onlinepluginver = "0.1"
+write-host "Online Plugin Version: $onlinepluginver"
 write-host "Mostrando plugins online"
 
 write-host " "
