@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.3.2"
+$farlibraryver = "0.3.3"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
 # En desarrollo ########################
@@ -568,6 +568,7 @@ function wingetupgrade{# WINGET UPDATE (From Base) #############################
                     Start-Sleep -s 5
                 }
             }
+            Remove-Item marcos64.Appx
             if(-not(test-path -path "mui64.appx")){
                 Write-host "Descargando mui64.appx..."
                 Invoke-WebRequest -uri "https://github.com/contratop/Sources/raw/main/far_data/mui64.Appx" -OutFile "mui64.appx"
@@ -598,6 +599,7 @@ function wingetupgrade{# WINGET UPDATE (From Base) #############################
                     Start-Sleep -s 5
                 }
             }
+            Remove-Item mui64.appx
         }
         else{
             if(-not(test-path -path "marcos86.Appx")){
@@ -630,6 +632,7 @@ function wingetupgrade{# WINGET UPDATE (From Base) #############################
                     Start-Sleep -s 5
                 }
             }
+            Remove-Item marcos86.Appx
             if(-not(test-path -path "mui86.appx")){
                 Write-host "Descargando mui86.appx"
                 Invoke-WebRequest -uri "https://github.com/contratop/Sources/raw/main/far_data/mui86.appx" -OutFile "mui86.appx"
@@ -660,6 +663,7 @@ function wingetupgrade{# WINGET UPDATE (From Base) #############################
                     start-sleep -s 5
                 }
             }
+            Remove-Item mui86.appx
         }
         write-host ""
         if(-not(test-path -path "winget.Msixbundle")){
@@ -689,6 +693,7 @@ function wingetupgrade{# WINGET UPDATE (From Base) #############################
                 Write-Warning "La instalacion de winget ha fallado"
             }
         }
+        Remove-Item winget.Msixbundle
     }
     ""
     pause
