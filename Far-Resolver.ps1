@@ -178,6 +178,7 @@ while($while1){
     write-host "[2] Reparacion individual" -ForegroundColor Cyan
     write-host ""
     write-host "[A] Actualizar/Obtener" -ForegroundColor Yellow
+    write-host "[N] Plugins Online" -ForegroundColor Blue
     write-host ""
     write-host "[X] Exit"
     $mainmenu = read-host "Selecciona una opcion"

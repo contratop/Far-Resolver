@@ -27,11 +27,12 @@ function activarkms{
     param($mode)
     write-host "Se va a proceder a activar KMS" -ForegroundColor Cyan
     if($mode -eq "kms"){
-        clear-host
+        write-host "Activacion estandar (Todos los windows)" -ForegroundColor Cyan
         write-host "Asegurate de tener desactivado el antivirus" -ForegroundColor Yellow
         $continue = read-host "Escribe [continue] para continuar"
         if($continue -eq "continue"){
-
+            write-host "Continuando..." -ForegroundColor Cyan
+            # proceder a activar kms
         }
         else{
             Write-warning "No se ha escrito continue"
@@ -40,7 +41,19 @@ function activarkms{
         }
     }
     elseif($mode -eq "volume"){
-
+    # Modo de activación por volumen 
+        Write-host "Activacion por volumen (Solo Windows 7)" -ForegroundColor Cyan
+        write-host "Asegurate de tener desactivado el antivirus" -ForegroundColor Yellow
+        $continue = Read-Host "Escribe [continue] para continuar"
+        if($continue -eq "continue"){
+            write-host "Continuando..." -ForegroundColor Cyan
+            # Proceder a la instalacion por volumen
+        }
+        else{
+            Write-warning "No se ha escrito continue"
+            write-host "Abortando..." -ForegroundColor Yellow
+            exit
+        }
     }
     else{
         Write-warning "Modo de instalación no válido"
