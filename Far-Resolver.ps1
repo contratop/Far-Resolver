@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.4"
+$ver = "0.4.1"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -163,7 +163,7 @@ while($while1){
     }
 
     write-host ""
-    Write-host "Far-Resolver Main Menu"
+    Write-host "Far-Resolver Main Menu" # Menu principal Far-Resolver ########################################
     write-host "--------------------------------"
     if(-not(test-path -path plugins)){
         write-host "No hay carpeta de plugins"
@@ -179,6 +179,7 @@ while($while1){
     write-host ""
     write-host "[A] Actualizar/Obtener" -ForegroundColor Yellow
     write-host "[N] Plugins Online" -ForegroundColor Blue
+    write-host "[L] Far-Library Console" -ForegroundColor Green
     write-host ""
     write-host "[X] Exit"
     $mainmenu = read-host "Selecciona una opcion"
@@ -371,6 +372,22 @@ while($while1){
                 Write-Warning "Error de ejecucion"
             }
             pause
+        }
+
+        l{
+            Clear-Host
+            FarLibraryVersion
+            if(-not($?)){
+                Write-Warning "Error de ejecucion"
+            }
+            write-host "Comandos disponibles en Far-Library"
+            write-host "-----------------------------------"
+            Get-Command -Module Far-Library
+            read-host "Presione cualquier tecla para salir a consola"
+            exit
+
+
+
         }
 
         x{

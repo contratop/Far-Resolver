@@ -43,7 +43,7 @@ $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemTyp
 
 
 
-function activarkms {
+function activatekms {
     param($mode)
     # Modos disponibles: classic, legacy, retail
     if($mode -eq "classic"){
@@ -636,7 +636,9 @@ function individualrepair{
 
 
 
-
+function getcommand{
+    Get-Command -Module Far-Library
+}
 
 
 
