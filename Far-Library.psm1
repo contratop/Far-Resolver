@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.4"
+$farlibraryver = "0.4.1"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
 
@@ -131,7 +131,7 @@ function activatekms {
         }
         $null = read-host "BAJA EL VOLUMEN y presiona enter para continuar"
         write-host "Activando Windows..."
-        start-process -filepath "C:\Programs Files\KMSpico\KMSELDI.exe" -Wait
+        start-process -filepath "C:\Program Files\KMSpico\KMSELDI.exe" -Wait
         if(-not($?)){
             Write-Warning "Excepcion en KMSELDI.exe"
             $continue = read-host "Escribe [continue] para continuar"
