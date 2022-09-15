@@ -1,5 +1,5 @@
 clear-host
-$onlinepluginver = "0.2"
+$onlinepluginver = "0.2.1"
 
 function executemode{
 
@@ -31,12 +31,12 @@ function executemode{
         exit
     }
     
-    if($getplugins -eq "d"){
+    elseif($getplugins -eq "d"){
         downloadmode
         $whileonline2 = $false
     }
     
-    if ($getplugins -eq "x") {
+    elseif ($getplugins -eq "x") {
         write-host "Saliendo..."
         write-host ""
         $whileonline2 = $false
@@ -69,19 +69,19 @@ function downloadmode{
         if ($getplugins -eq "1") {
             Invoke-WebRequest -uri "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" -OutFile "plugins\winutil.ps1"
             if($?) {
-                write-host "Plugin descargado correctamente"
+                write-host "Plugin descargado correctamente" -ForegroundColor Green
             } else {
                 write-host "Error en la descarga del plugin"
             }
             write-host ""
         }
 
-        if($getplugins -eq "e"){
+        elseif($getplugins -eq "e"){
             executemode
             $whileonline2 = $false
         }
 
-        if ($getplugins -eq "x") {
+        elseif ($getplugins -eq "x") {
             write-host "Saliendo..."
             write-host ""
             $whileonline2 = $false
