@@ -1,5 +1,8 @@
 clear-host
 $onlinepluginver = "0.1.1"
+$whileonline = $true
+while($whileonline){
+clear-host
 write-host "Online Plugin Version: $onlinepluginver"
 write-host "Mostrando plugins online"
 
@@ -31,4 +34,5 @@ if ($getplugins -eq "x") {
 else{
     write-host "Plugin no encontrado"
     write-host ""
+}
 }
