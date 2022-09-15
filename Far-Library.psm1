@@ -130,7 +130,7 @@ function activatekms {
             }
         }
         $null = read-host "BAJA EL VOLUMEN y presiona enter para continuar"
-        write-host "Activando Windows..."
+        write-host "Iniciando KMSpico" -ForegroundColor Cyan
         start-process -filepath "C:\Program Files\KMSpico\KMSELDI.exe" -Wait
         if(-not($?)){
             Write-Warning "Excepcion en KMSELDI.exe"
@@ -140,9 +140,7 @@ function activatekms {
                 break
             }
         }
-        else{
-            write-host "Windows activado correctamente" -ForegroundColor Green
-        }
+
         write-host "Limpiando archivos temporales..."
         remove-item -path cache/kms -recurse -force
         remove-item "C:\Program Files\KMSpico" -recurse -force
