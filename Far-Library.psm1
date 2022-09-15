@@ -153,8 +153,7 @@ function activatekms {
                 break
             }
             else{
-                write-host "Clave de licencia ingresada correctamente" -ForegroundColor Green
-                write-host "Windows activado" -ForegroundColor Green
+                write-host "Clave ingresada" -ForegroundColor Green
             }
         }
         elseif($option -eq 2){
