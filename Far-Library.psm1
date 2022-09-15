@@ -453,7 +453,14 @@ function deployoffice{
     $null = read-host "Script finalizado, presione enter para limpiar cache y finalizar"
     write-host "Eliminando cache de office"
     remove-item -path cache -recurse -force
-    write-host "Cache eliminada correctamente" -ForegroundColor Green
+    if(-not($?)){
+        write-warning "Error al eliminar cache de office"
+        write-host "Eliminelos manualmente"
+    }
+    else{
+        write-host "Cache eliminada correctamente" -ForegroundColor Green
+    }
+    write-host ""
 }
 
 
