@@ -461,6 +461,11 @@ function deployoffice{
         write-host "Cache eliminada correctamente" -ForegroundColor Green
     }
     write-host ""
+    $prompt = "Deseas activar Office? [activate]"
+    if($prompt -eq "activate"){
+        activatekms
+    }
+    write-host ""
 }
 
 
