@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.4.1"
+$farlibraryver = "0.4.2"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
 
@@ -39,13 +39,18 @@ $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemTyp
 
 
 function clearfarcache{
-    write-host "Limpiando cache de FAR"
-    Remove-Item cache -Recurse -Force
-    if($?){
-        write-host "Cache de FAR limpiada correctamente" -ForegroundColor Green
+    if(test-path -path cache){
+        write-host "Limpiando cache de FAR"
+        Remove-Item cache -Recurse -Force
+        if($?){
+            write-host "Cache de FAR limpiada correctamente" -ForegroundColor Green
+        }
+        else{
+            Write-Warning "No se ha podido limpiar la cache de FAR"
+        }
     }
     else{
-        Write-Warning "No se ha podido limpiar la cache de FAR"
+        write-host "No se ha encontrado cache de FAR"
     }
     write-host ""
 }
