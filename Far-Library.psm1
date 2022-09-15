@@ -38,7 +38,17 @@ $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemTyp
 
 
 
-
+function clearfarcache{
+    write-host "Limpiando cache de FAR"
+    Remove-Item cache -Recurse -Force
+    if($?){
+        write-host "Cache de FAR limpiada correctamente" -ForegroundColor Green
+    }
+    else{
+        Write-Warning "No se ha podido limpiar la cache de FAR"
+    }
+    write-host ""
+}
 
 
 
