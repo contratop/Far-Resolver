@@ -2,7 +2,46 @@ Write-host "Far-Library cargado correctamente" -ForegroundColor Green
 $farlibraryver = "0.3.3"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
-# En desarrollo ########################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function activarkms {
     param($mode)
@@ -94,6 +133,11 @@ function activarkms {
         else{
             write-host "Windows activado correctamente" -ForegroundColor Green
         }
+        write-host "Limpiando archivos temporales..."
+        remove-item -path cache/kms -recurse -force
+        remove-item "C:\Program Files\KMSpico" -recurse -force
+        write-host "Archivos temporales eliminados correctamente" -ForegroundColor Green
+        write-host "Activacion finalizada" -ForegroundColor Green
     }
 
     elseif($mode -eq "legacy"){
@@ -364,6 +408,8 @@ function activarkms {
         write-host "Ejecutando activador..."
         start-process -filepath "cache\activation\windowsloader.exe" -Wait
         Pause
+        write-host "Limpiando cache de activacion"
+        remove-item -path "cache\activation" -recurse -Force
         write-host "Script finalizado" -ForegroundColor Green
 
 
@@ -374,11 +420,30 @@ function activarkms {
     }
 }
 
-# En desarrollo ########################
+# Separador de funciones ################################################################################
+
+function deployoffice{
+    if(test-path -path cache\office){
+        write-host "Eliminando cache de office"
+        remove-item -path cache\office -recurse -force
+    }
+    write-host "Descargando Office Deployer"
+    Invoke-WebRequest -uri "https://github.com/asheroto/Deploy-Office/releases/latest/download/Deploy-Office.exe" -OutFile cache\office\Deploy-Office.exe
+    if(-not($?)){
+        write-host "Error al descargar Deploy-Office.exe"
+        write-host "Descarguelo manualmente"
+        write-host "https://github.com/asheroto/Deploy-Office/releases/latest/download/Deploy-Office.exe"
+        $null = read-host "Presione enter para continuar"
+    }
+    write-host "Ejecutando Office Deployer"
+    start-process -filepath cache\office\Deploy-Office.exe
+    $null = read-host "Script finalizado, presione enter para limpiar cache y finalizar"
+    write-host "Eliminando cache de office"
+    remove-item -path cache\office -recurse -force
+    write-host "Cache eliminada correctamente" -ForegroundColor Green
+}
 
 
-
-# En Desarrollo ########################
 
 
 
