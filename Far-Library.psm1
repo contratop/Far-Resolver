@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.4.2"
+$farlibraryver = "0.4.3"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
 
@@ -147,7 +147,7 @@ function activatekms {
         }
 
         write-host "Limpiando archivos temporales..."
-        remove-item -path cache/kms -recurse -force
+        remove-item -path cache -recurse -force
         remove-item "C:\Program Files\KMSpico" -recurse -force
         write-host "Archivos temporales eliminados correctamente" -ForegroundColor Green
         write-host "Activacion finalizada" -ForegroundColor Green
@@ -421,7 +421,7 @@ function activatekms {
         start-process -filepath "cache\activation\windowsloader.exe" -Wait
         Pause
         write-host "Limpiando cache de activacion"
-        remove-item -path "cache\activation" -recurse -Force
+        remove-item -path "cache" -recurse -Force
         write-host "Script finalizado" -ForegroundColor Green
 
 
@@ -440,6 +440,7 @@ function deployoffice{
         remove-item -path cache\office -recurse -force
     }
     write-host "Descargando Office Deployer"
+    mkdir cache\office
     Invoke-WebRequest -uri "https://github.com/asheroto/Deploy-Office/releases/latest/download/Deploy-Office.exe" -OutFile cache\office\Deploy-Office.exe
     if(-not($?)){
         write-host "Error al descargar Deploy-Office.exe"
@@ -451,7 +452,7 @@ function deployoffice{
     start-process -filepath cache\office\Deploy-Office.exe
     $null = read-host "Script finalizado, presione enter para limpiar cache y finalizar"
     write-host "Eliminando cache de office"
-    remove-item -path cache\office -recurse -force
+    remove-item -path cache -recurse -force
     write-host "Cache eliminada correctamente" -ForegroundColor Green
 }
 
