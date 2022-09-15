@@ -145,7 +145,7 @@ function activatekms {
         write-host "[2] Activacion Unofficial"
         $option = read-host "Escribe el numero de la opcion que deseas"
         if($option -eq 1){
-            $key = read-host "Escribe la clave de licencia original de WIndows"
+            $key = read-host "Escribe la clave de licencia original de Windows"
             slmgr /ipk $key
             if(-not($?)){
                 write-host "Error al ingresar la clave de licencia" -ForegroundColor Red
