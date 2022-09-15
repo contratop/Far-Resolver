@@ -3,65 +3,376 @@ $farlibraryver = "0.3.3"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
 # En desarrollo ########################
-function officeinstaller{
+
+function activarkms {
     param($mode)
-    write-host "Se va a proceder a instalar Office" -ForegroundColor Cyan
+    # Modos disponibles: classic, legacy, retail
     if($mode -eq "classic"){
-
+        write-host "Comprobando estado de lidencia..."
+        slmgr /xpr
+        start-sleep -s 3
+        Clear-Host
+        write-host "Desactiva el Defender y otros antivirus antes de proceder"
+        Pause
+        if((Get-MpComputerStatus).BehaviorMonitorEnabled){
+            Write-Warning "la proteccion contra alteraciones esta respondiendo"
+            write-host "Desactiva manualmente la proteccion contra alteraciones antes de continuar"
+            $continue = read-host "Escribe [continue] para continuar"
+            if(-not($continue -eq "continue")){
+                write-host "Abortando..."
+                break
+            }
+        }
+        if((Get-MpComputerStatus).RealTimeProtectionEnabled){
+            Write-Warning "la proteccion en tiempo real esta respondiendo"
+            write-host "Desactiva manualmente la proteccion en tiempo real antes de continuar"
+            $continue = read-host "Escribe [continue] para continuar"
+            if(-not($continue -eq "continue")){
+                write-host "Abortando..."
+                break
+            }
+        }
+        write-host "Iniciando proceso de activacion..."
+        if(test-path -path "cache\kms"){
+            write-host "Eliminando archivos temporales..."
+            remove-item -path cache/kms -recurse -force
+            if(-not($?)){
+                write-host "No se pudo eliminar la carpeta cache/kms"
+                write-host "Abortando..."
+                break
+            }
+            else{
+                write-host "Carpeta cache/kms eliminada correctamente" -ForegroundColor Green
+            }
+        }
+        if(test-path -path "C:\Programs Files\KMSpico"){
+            Write-Warning "Instalacion anterior detectada"
+            write-host "Eliminando instalacion anterior..."
+            remove-item -path "C:\Programs Files\KMSpico" -recurse -force
+            if(-not($?)){
+                write-host "No se pudo eliminar la instalacion anterior, abortando..."
+                break
+            }
+            else{
+                write-host "Instalacion anterior eliminada correctamente" -ForegroundColor Green
+            }
+        }
+        write-host "Descargando archivos necesarios..."
+        mkdir cache\kms
+        Invoke-WebRequest -uri "https://github.com/contratop/Sources/raw/main/far_data/activator/kms/KMSpico_setup.exe" -OutFile "cache/kms/KMSpico_setup.exe"
+        if(-not($?)){
+            write-host "Error al descargar KMSpico_setup.exe" -ForegroundColor Red
+            write-host "Descarguelo manualmente"
+            write-host "https://github.com/contratop/Sources/raw/main/far_data/activator/kms/KMSpico_setup.exe"
+            $continue = read-host "Escribe [continue] para continuar"
+            if(-not($continue -eq "continue")){
+                write-host "Abortando..."
+                break
+            }
+        }
+        write-host "Ejecutando KMSpico_setup.exe"
+        start-process -filepath "cache/kms/KMSpico_setup.exe" -Wait
+        if(-not($?)){
+            Write-Warning "Excepcion en KMSpico_setup.exe"
+            $continue = read-host "Escribe [continue] para continuar"
+            if(-not($continue -eq "continue")){
+                write-host "Abortando..."
+                break
+            }
+        }
+        $null = read-host "BAJA EL VOLUMEN y presiona enter para continuar"
+        write-host "Activando Windows..."
+        start-process -filepath "C:\Programs Files\KMSpico\KMSELDI.exe" -Wait
+        if(-not($?)){
+            Write-Warning "Excepcion en KMSELDI.exe"
+            $continue = read-host "Escribe [continue] para continuar"
+            if(-not($continue -eq "continue")){
+                write-host "Abortando..."
+                break
+            }
+        }
+        else{
+            write-host "Windows activado correctamente" -ForegroundColor Green
+        }
     }
-    elseif($module -eq "volume"){
+
+    elseif($mode -eq "legacy"){
+        write-host "[1] Activacion Original"
+        write-host "[2] Activacion Unofficial"
+        $option = read-host "Escribe el numero de la opcion que deseas"
+        if($option -eq 1){
+            $key = read-host "Escribe la clave de licencia original de WIndows"
+            slmgr /ipk $key
+            if(-not($?)){
+                write-host "Error al ingresar la clave de licencia" -ForegroundColor Red
+                write-host "Abortando..."
+                break
+            }
+            else{
+                write-host "Clave de licencia ingresada correctamente" -ForegroundColor Green
+                write-host "Windows activado" -ForegroundColor Green
+            }
+        }
+        elseif($option -eq 2){
+            $wh1 = $true
+            while($wh1){
+            write-host "[1] Activar Windows 10 Pro"
+            write-host "[2] Activar Windows 10 Home/Educationº"
+            write-host "[3] Activar Windows 10 Enterprise"
+            $option = read-host "Escribe el numero de la opcion que deseas"
+            if($option -eq 1){
+                clear-host
+                write-host "[1] Windows 10 Pro 1"
+                write-host "[2] Windows 10 Pro 2"
+                write-host "[3] Windows 10 Pro Education"
+                write-host "[4] Windows 10 Pro Education N"
+                write-host "[5] Windows 10 Pro N"
+                write-host "[6] Windows 10 Pro N 2"
+                write-host "[7] Windows 10 Pro Serial"
+                $selection = read-host "Escribe el numero de la opcion que deseas"
+                if($selection -eq 1){
+                    write-host "Activando Windows 10 Pro 1"
+                    slmgr /ipk VK7JG-NPHTM-C97JM-9MPGT-3V66T
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+
+                }
+                elseif($selection -eq 2){
+                    write-host "Activando Windows 10 Pro 2"
+                    slmgr /ipk NRG8B-VKK3Q-CXVCJ-9G2XF-6Q84J
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 3){
+                    write-host "Activando Windows 10 Pro Education"
+                    slmgr /ipk 6TP4R-GNPTD-KYYHQ-7B7DP-J447Y
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 4){
+                    write-host "Activando Windows 10 Pro Education N"
+                    slmgr /ipk YVWGF-BXNMC-HTQYQ-CPQ99-66QFC
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 5){
+                    write-host "Activando Windows 10 Pro N"
+                    slmgr /ipk MH37W-N47XK-V7XM9-C7227-GCQG9
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 6){
+                    write-host "Activando Windows 10 Pro N 2"
+                    slmgr /ipk 9FNHH-K3HBT-3W4TD-6383H-6XYWF
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 7){
+                    write-host "Activando Windows 10 Pro Serial"
+                    slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                else{
+                    write-host "Opcion invalida" -ForegroundColor Red
+                        write-host "Abortando..."
+                        break
+                    }
+                }
+
+            elseif($option -eq 2){
+                Clear-Host
+                write-host "[1] Windows 10 Home"
+                write-host "[2] Windows 10 Home Single Language"
+                write-host "[3] Windows 10 Education"
+                write-host "[4] Windows 10 Education N"
+                $selection = read-host "Escribe el numero de la opcion que deseas"
+                if($selection -eq 1){
+                    write-host "Activando Windows 10 Home"
+                    slmgr /ipk TX9XD-98N7V-6WMQ6-BX7FG-H8Q99
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 2){
+                    write-host "Activando Windows 10 Home Single Language"
+                    slmgr /ipk 7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 3){
+                    write-host "Activando Windows 10 Education"
+                    slmgr /ipk NW6C2-QMPVW-D7KKK-3GKT6-VCFB2
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 4){
+                    write-host "Activando Windows 10 Education N"
+                    slmgr /ipk 2WH4N-8QGBV-H22JP-CT43Q-MDWWJ
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                else{
+                    write-host "Opcion invalida" -ForegroundColor Red
+                        write-host "Abortando..."
+                        break
+                    }
+                }
+
+            
+            elseif($option -eq 3){
+                Clear-Host
+                write-host "[1] Windows 10 Enterprise"
+                write-host "[2] Windows 10 Enterprise 2"
+                write-host "[3] Windows 10 Enterprise G"
+                write-host "[4] Windows 10 Enterprise G N"
+                write-host "[5] Windows 10 Enterprise N"
+                $selection = read-host "Escribe el numero de la opcion que deseas"
+                if($selection -eq 1){
+                    write-host "Activando Windows 10 Enterprise"
+                    slmgr /ipk NPPR9-FWDCX-D2C8J-H872K-2YT43
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 2){
+                    write-host "Activando Windows 10 Enterprise 2"
+                    slmgr /ipk NPPR9-FWDCX-D2C8J-H872K-2YT43
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 3){
+                    write-host "Activando Windows 10 Enterprise G"
+                    slmgr /ipk YYVX9-NTFWV-6MDM3-9PT4T-4M68B
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 4){
+                    write-host "Activando Windows 10 Enterprise G N"
+                    slmgr /ipk 44RPN-FTY23-9VTTB-MP9BX-T84FV
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                elseif($selection -eq 5){
+                    write-host "Activando Windows 10 Enterprise N"
+                    slmgr /ipk DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4
+                    write-host "Cambiando host de licencia"
+                    slmgr /skms kms.msguides.com
+                    write-host "Activando Windows"
+                    slmgr /ato
+                    write-host "Script finalizado" -ForegroundColor Green
+                }
+                else{
+                    write-host "Opcion invalida" -ForegroundColor Red
+                        write-host "Abortando..."
+                        break
+                    }
+                }
+
+            else{
+                Write-Warning "Opcion invalida"
+                Start-Sleep -s 2
+            }
+        }
+         }
+
+     }
+    
+    elseif($mode -eq "keys"){
+        if(test-path -path "cache\activation"){
+            write-host "Limpiando cache de activacion"
+            remove-item -path "cache\activation" -recurse -Force
+            if(-not($?)){
+                write-host "Error al limpiar la cache de activacion" -ForegroundColor Red
+                write-host "Abortando..."
+                break
+            }
+            else{
+                write-host "Cache de activacion limpiada correctamente" -ForegroundColor Green
+            }
+        }
+        write-host "Descargando software de activacion Retail"
+        mkdir cache\activation
+        Invoke-WebRequest -uri "https://github.com/contratop/Sources/raw/main/far_data/activator/winloader/Keys.ini" -OutFile "cache\activation\Keys.ini"
+        if(-not($?)){
+            Write-Warning "Error al descargar las Keys"
+            $continue = "Escribe [continue] para continuar"
+            if(-not($continue -eq "continue")){
+                Write-Warning "Abortando..."
+                break
+            }
+        }
+        else{
+            write-host "Keys descargado correctamente" -ForegroundColor Green
+        }
+        write-host "Descargando software de activacion..."
+        Invoke-WebRequest -uri "https://github.com/contratop/Sources/raw/main/far_data/activator/winloader/Windows%20Loader.exe" -OutFile "cache\activation\windowsloader.exe"
+        if(-not($?)){
+            Write-Warning "Error al descargar el activador"
+            $continue = "Escribe [continue] para continuar"
+            if(-not($continue -eq "continue")){
+                Write-Warning "Abortando..."
+                break
+            }
+        }
+        else{
+            write-host "Activador descargado correctamente" -ForegroundColor Green
+        }
+        write-host "Ejecutando activador..."
+        start-process -filepath "cache\activation\windowsloader.exe" -Wait
+        Pause
+        write-host "Script finalizado" -ForegroundColor Green
+
 
     }
     else{
-        Write-warning "Modo de instalación no válido"
-        write-host "Reportar este error al desarrollador" -ForegroundColor Yellow
-        exit
+        write-host "Parametro invalido" -ForegroundColor Red
+        write-host "Contacte al desarrollador"
     }
 }
-# En desarrollo ########################
-
-
-# En desarrollo ########################
-
-function activarkms{
-    param($mode)
-    write-host "Se va a proceder a activar KMS" -ForegroundColor Cyan
-    if($mode -eq "kms"){
-        write-host "Activacion estandar (Todos los windows)" -ForegroundColor Cyan
-        write-host "Asegurate de tener desactivado el antivirus" -ForegroundColor Yellow
-        $continue = read-host "Escribe [continue] para continuar"
-        if($continue -eq "continue"){
-            write-host "Continuando..." -ForegroundColor Cyan
-            # proceder a activar kms
-        }
-        else{
-            Write-warning "No se ha escrito continue"
-            write-host "Abortando..." -ForegroundColor Yellow
-            exit
-        }
-    }
-    elseif($mode -eq "volume"){
-    # Modo de activación por volumen 
-        Write-host "Activacion por volumen (Solo Windows 7)" -ForegroundColor Cyan
-        write-host "Asegurate de tener desactivado el antivirus" -ForegroundColor Yellow
-        $continue = Read-Host "Escribe [continue] para continuar"
-        if($continue -eq "continue"){
-            write-host "Continuando..." -ForegroundColor Cyan
-            # Proceder a la instalacion por volumen
-        }
-        else{
-            Write-warning "No se ha escrito continue"
-            write-host "Abortando..." -ForegroundColor Yellow
-            exit
-        }
-    }
-    else{
-        Write-warning "Modo de instalación no válido"
-        write-host "Reportar este error al desarrollador" -ForegroundColor Yellow
-        exit
-    }
-}
-
 
 # En desarrollo ########################
 
