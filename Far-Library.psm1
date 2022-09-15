@@ -45,7 +45,7 @@ $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemTyp
 
 function activatekms {
     param($mode)
-    # Modos disponibles: classic, legacy, retail
+    # Modos disponibles: classic, legacy, keys
     if($mode -eq "classic"){
         write-host "Comprobando estado de lidencia..."
         slmgr /xpr
