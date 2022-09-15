@@ -383,6 +383,7 @@ while($while1){
             write-host "Comandos disponibles en Far-Library"
             write-host "-----------------------------------"
             Get-Command -Module Far-Library
+            write-host ""
             read-host "Presione cualquier tecla para salir a consola"
             exit
 
