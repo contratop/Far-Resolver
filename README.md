@@ -11,7 +11,7 @@ Antes de descargar y/o ejecutar:
 ````
 Set-ExecutionPolicy Unrestricted
 ````
-**Opcional:** *Puedes establecer luego ``` Set-ExecutionPolicy Restricted``` para volver a bloquear la ejecuccion de script*
+**Opcional:** *Puedes establecer luego ``` Set-ExecutionPolicy Restricted``` para volver a bloquear la ejecuccion de scripts*
 
 ### Descargar y ejecutar
 
