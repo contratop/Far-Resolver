@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.4.1"
+$ver = "0.4.2"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
@@ -75,7 +75,6 @@ else{
 # Directory Parse ################################
 if(-not(test-path -path plugins)){ # Check Plugins Dir
     Write-Warning "Plugins Folder not found"
-    $errorcounter = $errorcounter + 1
 }
 else{
     $countps1 = Get-ChildItem plugins\*.ps1 -Recurse -File | Measure-Object | Select-Object Count

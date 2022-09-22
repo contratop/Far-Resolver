@@ -1,5 +1,5 @@
 clear-host
-$onlinepluginver = "0.2.1"
+$onlinepluginver = "0.2.2"
 
 function executemode{
 
@@ -7,6 +7,7 @@ function executemode{
     while($whileonline2){
     clear-host
     write-host "Online Plugin Version: $onlinepluginver"
+    write-host "Modo Online" -ForegroundColor Cyan
     write-host "Mostrando plugins online"
     
     write-host " "
@@ -16,7 +17,10 @@ function executemode{
     if(test-path -path "plugins"){
         write-host "[D] - Download Mode" -ForegroundColor Blue
     }
-    write-host "[x] - Salir"
+    else{
+        write-host "[D] - Download Mode (Create plugin directory)" -ForegroundColor Blue
+    }
+    write-host "[x] - Salir" -ForegroundColor Yellow
     
     $getplugins = read-host "Escribe el numero del plugin que quieres instalar"
     
@@ -32,6 +36,12 @@ function executemode{
     }
     
     elseif($getplugins -eq "d"){
+        if(-not(test-path -path plugins)){
+            write-host "Carpeta plugins no detectada. creando..."
+            mkdir plugins
+            write-host "Carpeta plugins creada" -ForegroundColor Green
+            Start-Sleep -s 1
+        }
         downloadmode
         $whileonline2 = $false
     }
@@ -55,6 +65,7 @@ function downloadmode{
     while($whileonline2){
         clear-host
         write-host "Online Plugin Version: $onlinepluginver"
+        write-host "Modo Descarga" -ForegroundColor Cyan
         write-host "Mostrando plugins para descargar"
         
         write-host ""
@@ -62,7 +73,7 @@ function downloadmode{
         write-host "[1] - winutils (@christitustech)"
         write-host ""
         write-host "[E] - Execute Mode" -ForegroundColor Blue
-        write-host "[x] - Salir"
+        write-host "[x] - Salir" -ForegroundColor Yellow
 
         $getplugins = read-host "Escribe el numero del plugin que quieres descargar"
 
