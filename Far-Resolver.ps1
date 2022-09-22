@@ -147,7 +147,7 @@ while($while1){
     # Plugins Data Check & Print Data
     if(test-path -path plugins){
         if($countps1.count -eq 0){
-            Write-Warning "No hay plugins disponibles"
+            Write-Host "No hay plugins disponibles" -ForegroundColor Yellow
             $pluginsenable = 0
         }
         else{
