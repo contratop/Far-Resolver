@@ -13,6 +13,7 @@ function executemode{
     write-host " "
     
     write-host "[1] - winutils (@christitustech)"
+    write-host "[2] - Defender Manipulator (@ContratopDev)"
     write-host ""
     if(test-path -path "plugins"){
         write-host "[D] - Download Mode" -ForegroundColor Blue
@@ -26,6 +27,16 @@ function executemode{
     
     if ($getplugins -eq "1") {
         Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" | Invoke-Expression
+        if($?) {
+            write-host "Plugin executado correctamente"
+        } else {
+            write-host "Error en la ejecucion del plugin"
+        }
+        write-host ""
+        exit
+    }
+    if($getplugins -eq "2"){
+        Invoke-WebRequest -UseBasicParsing "https://github.com/contratop/Far-Resolver/raw/main/plugins/DefenderManipulator.ps1" | Invoke-Expression
         if($?) {
             write-host "Plugin executado correctamente"
         } else {
@@ -71,6 +82,7 @@ function downloadmode{
         write-host ""
 
         write-host "[1] - winutils (@christitustech)"
+        write-host "[2] - Defender Manipulator (@ContratopDev)"
         write-host ""
         write-host "[E] - Execute Mode" -ForegroundColor Blue
         write-host "[x] - Salir" -ForegroundColor Yellow
@@ -79,6 +91,15 @@ function downloadmode{
 
         if ($getplugins -eq "1") {
             Invoke-WebRequest -uri "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" -OutFile "plugins\winutil.ps1"
+            if($?) {
+                write-host "Plugin descargado correctamente" -ForegroundColor Green
+            } else {
+                write-host "Error en la descarga del plugin"
+            }
+            write-host ""
+        }
+        elseif($getplugins -eq "2"){
+            Invoke-WebRequest -uri "https://github.com/contratop/Far-Resolver/raw/main/plugins/DefenderManipulator.ps1" -OutFile "plugins\DefenderManipulator.ps1"
             if($?) {
                 write-host "Plugin descargado correctamente" -ForegroundColor Green
             } else {
