@@ -10,11 +10,12 @@ function executemode{
     write-host "Modo Online" -ForegroundColor Cyan
     write-host "Mostrando plugins online"
     
-    write-host " "
+    write-host " " # MENU DE PLUGINS ONLINE ########################################
     
     write-host "[1] - winutils (@christitustech)"
     write-host "[2] - Defender Manipulator (@ContratopDev)"
     write-host ""
+    write-host "[M] - Manual execution"
     if(test-path -path "plugins"){
         write-host "[D] - Download Mode" -ForegroundColor Blue
     }
@@ -35,7 +36,7 @@ function executemode{
         write-host ""
         exit
     }
-    if($getplugins -eq "2"){
+    elseif($getplugins -eq "2"){
         Invoke-WebRequest -UseBasicParsing "https://github.com/contratop/Far-Resolver/raw/main/plugins/DefenderManipulator.ps1" | Invoke-Expression
         if($?) {
             write-host "Plugin executado correctamente"
@@ -44,6 +45,24 @@ function executemode{
         }
         write-host ""
         exit
+    }
+
+    elseif($getplugins -eq "M"){
+        $manual = read-host "Escribe la URL del plugin que quieres ejecutar"
+        if(($manual -match "http")-and($manual -match ".ps1")){
+            Invoke-WebRequest -UseBasicParsing $manual | Invoke-Expression
+            if(-not($?)){
+                Write-Warning "Codigo de salida con errores"
+            }
+            else{
+                write-host "Plugin ejecutado correctamente" -ForegroundColor Green
+            }
+            pause
+        }
+        else{
+            Write-Warning "URL invalida"
+            Start-Sleep -s 2
+        }
     }
     
     elseif($getplugins -eq "d"){
@@ -79,11 +98,12 @@ function downloadmode{
         write-host "Modo Descarga" -ForegroundColor Cyan
         write-host "Mostrando plugins para descargar"
         
-        write-host ""
+        write-host "" # MENU MODO DESCARGA ##############################
 
         write-host "[1] - winutils (@christitustech)"
         write-host "[2] - Defender Manipulator (@ContratopDev)"
         write-host ""
+        write-host "[M] - Manual Download"
         write-host "[E] - Execute Mode" -ForegroundColor Blue
         write-host "[x] - Salir" -ForegroundColor Yellow
 
@@ -106,6 +126,25 @@ function downloadmode{
                 write-host "Error en la descarga del plugin"
             }
             write-host ""
+        }
+
+        elseif($getplugins -eq "M"){
+            $manual = read-host "Escribe la URL del plugin que quieres descargar"
+            if(($manual -match "http")-and($manual -match ".ps1")){
+                $manualname = read-host "Escribe el nombre del plugin"
+                Invoke-WebRequest -uri $manual -OutFile "plugins\$manualname.ps1"
+                if(-not($?)){
+                    Write-Warning "Error en la descarga del plugin"
+                }
+                else{
+                    write-host "Plugin descargado correctamente" -ForegroundColor Green
+                }
+                pause
+            }
+            else{
+                Write-Warning "URL invalida"
+                Start-Sleep -s 2
+            }
         }
 
         elseif($getplugins -eq "e"){
