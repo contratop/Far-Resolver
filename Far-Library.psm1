@@ -34,6 +34,14 @@ $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemTyp
 
 
 
+function restartexplorer{
+    $explorer = Get-Process -Name explorer
+    $explorer | Stop-Process -Force
+    $explorer | Start-Process
+}
+
+
+
 
 
 

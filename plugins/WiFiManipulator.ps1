@@ -203,8 +203,11 @@ function dumpmode{ # Dump mode #############################
                 if($searchprofile -eq "x"){
                     $whilerecurrent = $false
                 }
-                netsh wlan show profile name=$searchprofile key=clear >> "WiFi-ProfileRecurrentData.txt"
-                write-host "Dump of $searchprofile finished"
+                else{
+                    netsh wlan show profile name=$searchprofile key=clear >> "WiFi-ProfileRecurrentData.txt"
+                    write-host "Dump of $searchprofile finished"
+                    write-host ""
+                }
                 write-host ""
                 pause
             }
