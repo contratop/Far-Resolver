@@ -61,7 +61,7 @@ while($whdefendermanipulator){
 
 
     write-host "----------------------------------------"
-    # MENU OPTIONS ################################
+    # MENU OPTIONS ######################################################################################
     write-host "1- Clear Threat History"
     write-host "2- Change Windows Defender parameters"
     write-host "3- Restore Threat"
@@ -493,20 +493,66 @@ while($whdefendermanipulator){
 
     if($choice -eq 3){ # CHOICE 3 #############################
         if(test-path -path "MpCmdRun.exe"){
-            Write-Host ""
-            Write-Warning "Restore all threats to Quarantine?"
-            $continue = Read-Host "write [restoreallthreatstoquarantine] to continue"
-            if($continue -eq "restoreallthreatstoquarantine"){
-                .\MpCmdRun.exe -Restore -All
-                if($?){
-                    Write-Host "All threats have been restored to Quarantine" -ForegroundColor Green
-                }
-                else{
-                    Write-Host "Something went wrong" -ForegroundColor Red
-                }
-            }
-            else{
-                Write-Host "Aborted" -ForegroundColor Yellow
+            $whilethreat = $true
+            while ($whilethreat) {
+                            clear-host
+                            write-host ""
+                            write-host "[1] Restore Individual Threat"
+                            write-host "[2] Restore All Threats"
+                            write-host ""
+                            write-host "[x] Back"
+                            $imput = Read-Host "Select an option"
+                            if($imput -eq 1){
+                                write-host "----------------------------------------"
+                                .\mpcmdrun.exe -Restore -ListAll
+                                write-host "----------------------------------------"
+                                $threatpath = Read-Host "Copy and paste threat path"
+                                if(-not($threatpath)){
+                                    write-warning "No threat path entered"
+                                    Start-Sleep 2
+                                }
+                                else{
+                                    .\mpcmdrun.exe -Restore -FilePath $threatpath
+                                    if($?){
+                                        write-host "Threat has been restored" -ForegroundColor Green
+                                        Start-Sleep 2
+                                    }
+                                    else{
+                                        write-warning "Threat could not be restored"
+                                        Start-Sleep 2
+                                    }
+                                }
+
+                            }
+                            elseif($imput -eq 2){
+                                write-host "----------------------------------------"
+                                Write-Warning "This will restore all threats"
+                                Write-Warning "This is insecure and should only be used in a controlled environment"
+                                write-host "----------------------------------------"
+                                $confirm = Read-Host "Are you sure you want to restore all threats? (restoreallthreats)"
+                                if($confirm -eq "restoreallthreats"){
+                                    .\mpcmdrun.exe -Restore -All
+                                    if($?){
+                                        write-host "All threats have been restored" -ForegroundColor Green
+                                        Start-Sleep 2
+                                    }
+                                    else{
+                                        write-warning "Threats could not be restored"
+                                        Start-Sleep 2
+                                    }
+                                }
+                                else{
+                                    write-warning "Aborting"
+                                    Start-Sleep 2
+                                }
+                            }
+                            elseif($imput -eq "x"){
+                                $whilethreat = $false
+                            }
+                            else{
+                                write-warning "Invalid option"
+                                Start-Sleep 2
+                            }
             }
         }
         else{
