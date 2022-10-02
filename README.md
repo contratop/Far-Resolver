@@ -18,8 +18,3 @@ Set-ExecutionPolicy Unrestricted
 ````
 Invoke-WebRequest -uri "https://github.com/contratop/Far-Resolver/raw/main/Far-Resolver.ps1" -OutFile "Far-Resolver.ps1" ;; ./Far-Resolver.ps1
 ````
-
-### Ejecutar Online
-````
-Invoke-WebRequest -UseBasicParsing "https://github.com/contratop/Far-Resolver/raw/main/Far-Resolver.ps1" | Invoke-Expression
-````
