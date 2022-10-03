@@ -2,7 +2,7 @@
 # Header  ##########################
 Remove-Module Far-Library
 Clear-Host
-$ver = "0.4.2"
+$ver = "0.4.3"
 $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
 
 
