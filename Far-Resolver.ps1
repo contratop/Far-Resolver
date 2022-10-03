@@ -256,6 +256,7 @@ while($while1){
                 write-host "[3] Instalar Winget"
                 write-host "[4] Instalar Git"
                 write-host "[5] Actualizar Far-Library"
+                write-host "[6] Actualizar ayuda de PowerShell"
                 write-host ""
                 write-host "[X] Volver a Menu Principal"
                 $option = read-host "Selecciona una opcion"
@@ -352,6 +353,18 @@ while($while1){
                             write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
                             pause
                         }
+                    }
+                    6{
+                        write-host ""
+                        write-host "Actualizando ayuda de PowerShell"
+                        Update-Help
+                        if(-not($?)){
+                            Write-Warning "Ha ocurrido un error durante la actualizacion"
+                        }
+                        else{
+                            write-host "Actualizacion completada" -ForegroundColor Green
+                        }
+                        pause
                     }
                     x{
                         $while2 = $false
