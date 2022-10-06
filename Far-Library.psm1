@@ -1,5 +1,5 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
-$farlibraryver = "0.4.3"
+$farlibraryver = "0.4.4"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 
 
@@ -68,7 +68,7 @@ function clearfarcache{
 
 function activatekms {
     param($mode)
-    # Modos disponibles: classic, legacy, keys
+    # Modos disponibles: classic, legacy, oem
     if($mode -eq "classic"){
         write-host "Comprobando estado de lidencia..."
         slmgr /xpr
@@ -385,7 +385,7 @@ function activatekms {
 
      }
     
-    elseif($mode -eq "keys"){
+    elseif($mode -eq "oem"){
         if(test-path -path "cache\activation"){
             write-host "Limpiando cache de activacion"
             remove-item -path "cache\activation" -recurse -Force
