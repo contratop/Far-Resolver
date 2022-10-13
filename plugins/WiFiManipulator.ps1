@@ -3,9 +3,10 @@ Clear-Host
 $host.UI.RawUI.WindowTitle = "WiFi Manipulator by ContratopDev"
 
 
-function manipulatemode{ # Manipulate Mode ############################
+function manipulatemode {
+    # Manipulate Mode ############################
     $while1 = $true
-    while($while1){
+    while ($while1) {
         write-host ""
         write-host "Manipulate Mode" -ForegroundColor Cyan
         write-host ""
@@ -24,7 +25,7 @@ function manipulatemode{ # Manipulate Mode ############################
         write-host "[X] - Exit"
 
         $selection = Read-Host "Select an option"
-        if($selection -eq "A"){
+        if ($selection -eq "A") {
             write-host "-----------------------------------------------"
             write-host "Show All data" -ForegroundColor Cyan
             write-host ""
@@ -33,7 +34,7 @@ function manipulatemode{ # Manipulate Mode ############################
             pause
 
         }
-        elseif($selection -eq 1){
+        elseif ($selection -eq 1) {
             write-host ""
             write-host "Actual Interface" -ForegroundColor Cyan
             write-host ""
@@ -41,7 +42,7 @@ function manipulatemode{ # Manipulate Mode ############################
             write-host ""
             pause
         }
-        elseif($selection -eq 2){
+        elseif ($selection -eq 2) {
             write-host ""
             write-host "Show Profile List" -ForegroundColor Cyan
             write-host ""
@@ -49,7 +50,7 @@ function manipulatemode{ # Manipulate Mode ############################
             write-host ""
             pause
         }
-        elseif($selection -eq 3){
+        elseif ($selection -eq 3) {
             write-host ""
             write-host "Show Profile Data" -ForegroundColor Cyan
             write-host ""
@@ -59,7 +60,7 @@ function manipulatemode{ # Manipulate Mode ############################
             write-host ""
             pause
         }
-        elseif($selection -eq 4){
+        elseif ($selection -eq 4) {
             write-host ""
             write-host "Delete Profile" -ForegroundColor Cyan
             write-host ""
@@ -69,7 +70,7 @@ function manipulatemode{ # Manipulate Mode ############################
             write-host ""
             pause
         }
-        elseif($selection -eq 5){
+        elseif ($selection -eq 5) {
             write-host ""
             write-host "Import Profile" -ForegroundColor Cyan
             write-host ""
@@ -79,7 +80,7 @@ function manipulatemode{ # Manipulate Mode ############################
             write-host ""
             pause
         }
-        elseif($selection -eq 6){
+        elseif ($selection -eq 6) {
             write-host ""
             write-host "WLAN Report (Admin)" -ForegroundColor Cyan
             write-host ""
@@ -87,7 +88,7 @@ function manipulatemode{ # Manipulate Mode ############################
             write-host ""
             pause
         }
-        elseif($selection -eq 7){
+        elseif ($selection -eq 7) {
             write-host ""
             write-host "Disconnect Network" -ForegroundColor Cyan
             write-host ""
@@ -95,7 +96,7 @@ function manipulatemode{ # Manipulate Mode ############################
             write-host ""
             pause
         }
-        elseif($selection -eq 8){
+        elseif ($selection -eq 8) {
             write-host ""
             write-host "Connect Network" -ForegroundColor Cyan
             write-host ""
@@ -109,15 +110,15 @@ function manipulatemode{ # Manipulate Mode ############################
 
 
 
-        elseif($selection -eq "D"){
+        elseif ($selection -eq "D") {
             $while1 = $false
             dumpmode
         }
-        elseif($selection -eq "X"){
+        elseif ($selection -eq "X") {
             $while1 = $false
             exit
         }
-        else{
+        else {
             write-warning "Invalid Option"
             start-sleep -s 2
         }
@@ -130,9 +131,10 @@ function manipulatemode{ # Manipulate Mode ############################
 }
 
 
-function dumpmode{ # Dump mode #############################
+function dumpmode {
+    # Dump mode #############################
     $while2 = $true
-    while($while2){
+    while ($while2) {
         write-host "Dump mode" -ForegroundColor Cyan
         write-host ""
         write-host "[A] - Dump all data"
@@ -149,7 +151,7 @@ function dumpmode{ # Dump mode #############################
         write-host "[X] - Exit"
 
         $selection = Read-Host "Select an option"
-        if($selection -eq "A"){
+        if ($selection -eq "A") {
             write-host ""
             write-host "Dump all data" -ForegroundColor Cyan
             write-host ""
@@ -159,7 +161,7 @@ function dumpmode{ # Dump mode #############################
             write-host ""
             pause
         }
-        elseif($selection -eq 1){
+        elseif ($selection -eq 1) {
             write-host ""
             write-host "Dump actual interface" -ForegroundColor Cyan
             write-host ""
@@ -169,7 +171,7 @@ function dumpmode{ # Dump mode #############################
             write-host ""
             pause
         }
-        elseif($selection -eq 2){
+        elseif ($selection -eq 2) {
             write-host ""
             write-host "Dump profile list" -ForegroundColor Cyan
             write-host ""
@@ -179,7 +181,7 @@ function dumpmode{ # Dump mode #############################
             write-host ""
             pause
         }
-        elseif($selection -eq 3){
+        elseif ($selection -eq 3) {
             write-host ""
             write-host "Dump profile data (With Key)" -ForegroundColor Cyan
             write-host ""
@@ -191,19 +193,19 @@ function dumpmode{ # Dump mode #############################
             write-host ""
             pause
         }
-        elseif($selection -eq 33){
+        elseif ($selection -eq 33) {
             $whilerecurrent = $true
-            while($whilerecurrent){
+            while ($whilerecurrent) {
                 write-host ""
                 write-host "Dump profile data (With Key)" -ForegroundColor Cyan
                 write-host ""
                 write-host "Dump in $pwd\WiFi-ProfileData.txt"
                 netsh wlan show profiles
                 $searchprofile = Read-Host "Profile Name (or X to exit)"
-                if($searchprofile -eq "x"){
+                if ($searchprofile -eq "x") {
                     $whilerecurrent = $false
                 }
-                else{
+                else {
                     netsh wlan show profile name=$searchprofile key=clear >> "WiFi-ProfileRecurrentData.txt"
                     write-host "Dump of $searchprofile finished"
                     write-host ""
@@ -215,7 +217,7 @@ function dumpmode{ # Dump mode #############################
 
 
 
-        elseif($selection -eq 4){
+        elseif ($selection -eq 4) {
             write-host ""
             write-host "Dump profile data & Delete" -ForegroundColor Cyan
             write-host ""
@@ -230,7 +232,7 @@ function dumpmode{ # Dump mode #############################
             write-host ""
             pause
         }
-        elseif($selection -eq 5){
+        elseif ($selection -eq 5) {
             write-host ""
             write-host "Dump XML (All Profiles)" -ForegroundColor Cyan
             write-host ""
@@ -240,7 +242,7 @@ function dumpmode{ # Dump mode #############################
             write-host ""
             pause
         }
-        elseif($selection -eq 6){
+        elseif ($selection -eq 6) {
             write-host ""
             write-host "Dump WLAN Report (Admin)" -ForegroundColor Cyan
             write-host ""
@@ -255,15 +257,15 @@ function dumpmode{ # Dump mode #############################
 
 
 
-        elseif($selection -eq "M"){
+        elseif ($selection -eq "M") {
             $while2 = $false
             manipulatemode
         }
-        elseif($selection -eq "X"){
+        elseif ($selection -eq "X") {
             $while2 = $false
             exit
         }
-        else{
+        else {
             write-warning "Invalid Option"
             start-sleep -s 2
         }
