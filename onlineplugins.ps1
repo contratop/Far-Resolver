@@ -1,6 +1,26 @@
 clear-host
 $onlinepluginver = "0.2.2"
 
+
+## Plugins database ##
+
+# Plugin 1 (WinUtils)
+$pluginname1 = "WinUtils"
+$pluginsauthor1 = "@christitustech"
+$pluginsurlraw1 = "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" 
+
+# Plugin 2 (Defendermanipulator)
+$pluginname2 = "Defender Manipulator"
+$pluginsauthor2 = "@ContratopDev"
+$pluginsurlraw2 = "https://github.com/contratop/Far-Resolver/raw/main/plugins/DefenderManipulator.ps1"
+
+# Plugin 3 (Admin Downgrader)
+$pluginname3 = "Admin Downgrader"
+$pluginsauthor3 = "@ContratopDev"
+$pluginsurlraw3 = "Not Set" # PENDING SETTING
+
+
+
 function executemode {
 
     $whileonline2 = $true
@@ -12,8 +32,9 @@ function executemode {
     
         write-host " " # MENU DE PLUGINS ONLINE ########################################
     
-        write-host "[1] - winutils (@christitustech)"
-        write-host "[2] - Defender Manipulator (@ContratopDev)"
+        write-host "[1] - $pluginname1 ($pluginsauthor1)" 
+        write-host "[2] - $pluginname2 ($pluginsauthor2)"
+        write-host "[3] - $pluginname3 ($pluginsauthor3)"
         write-host ""
         write-host "[M] - Manual execution"
         if (test-path -path "plugins") {
@@ -27,7 +48,7 @@ function executemode {
         $getplugins = read-host "Escribe el numero del plugin que quieres instalar"
     
         if ($getplugins -eq "1") {
-            Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" | Invoke-Expression
+            Invoke-WebRequest -UseBasicParsing "$pluginsurlraw1" | Invoke-Expression
             if ($?) {
                 write-host "Plugin executado correctamente"
             }
@@ -38,7 +59,19 @@ function executemode {
             exit
         }
         elseif ($getplugins -eq "2") {
-            Invoke-WebRequest -UseBasicParsing "https://github.com/contratop/Far-Resolver/raw/main/plugins/DefenderManipulator.ps1" | Invoke-Expression
+            Invoke-WebRequest -UseBasicParsing "$pluginsurlraw2" | Invoke-Expression
+            if ($?) {
+                write-host "Plugin executado correctamente"
+            }
+            else {
+                write-host "Error en la ejecucion del plugin"
+            }
+            write-host ""
+            exit
+        }
+
+        elseif ($getplugins -eq "3") {
+            Invoke-WebRequest -UseBasicParsing "$pluginsurlraw3" | Invoke-Expression
             if ($?) {
                 write-host "Plugin executado correctamente"
             }
@@ -102,8 +135,8 @@ function downloadmode {
         
         write-host "" # MENU MODO DESCARGA ##############################
 
-        write-host "[1] - winutils (@christitustech)"
-        write-host "[2] - Defender Manipulator (@ContratopDev)"
+        write-host "[1] - $pluginname1 ($pluginsauthor1)"
+        write-host "[2] - $pluginname2 ($pluginsauthor2)"
         write-host ""
         write-host "[M] - Manual Download"
         write-host "[E] - Execute Mode" -ForegroundColor Blue
@@ -112,7 +145,7 @@ function downloadmode {
         $getplugins = read-host "Escribe el numero del plugin que quieres descargar"
 
         if ($getplugins -eq "1") {
-            Invoke-WebRequest -uri "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1" -OutFile "plugins\winutil.ps1"
+            Invoke-WebRequest -uri "$pluginsurlraw1" -OutFile "plugins\winutil.ps1"
             if ($?) {
                 write-host "Plugin descargado correctamente" -ForegroundColor Green
             }
@@ -122,7 +155,7 @@ function downloadmode {
             write-host ""
         }
         elseif ($getplugins -eq "2") {
-            Invoke-WebRequest -uri "https://github.com/contratop/Far-Resolver/raw/main/plugins/DefenderManipulator.ps1" -OutFile "plugins\DefenderManipulator.ps1"
+            Invoke-WebRequest -uri "$pluginsurlraw2" -OutFile "plugins\DefenderManipulator.ps1"
             if ($?) {
                 write-host "Plugin descargado correctamente" -ForegroundColor Green
             }
@@ -131,6 +164,18 @@ function downloadmode {
             }
             write-host ""
         }
+
+        elseif($getplugins -eq "3"){
+            Invoke-WebRequest -uri "$pluginsurlraw3" -OutFile "plugins\AdminDowngrader.ps1"
+            if ($?) {
+                write-host "Plugin descargado correctamente" -ForegroundColor Green
+            }
+            else {
+                write-host "Error en la descarga del plugin"
+            }
+            write-host ""
+        }
+
 
         elseif ($getplugins -eq "M") {
             $manual = read-host "Escribe la URL del plugin que quieres descargar"
