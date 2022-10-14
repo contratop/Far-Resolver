@@ -1,451 +1,445 @@
-
-#Far Resolver 1.0 (test commit)
-# Header  ##########################
-Remove-Module Far-Library
-Clear-Host
-$ver = "0.5.1"
-$Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
+try {
+    #Far Resolver 1.0 (test commit)
+    # Header  ##########################
+    Remove-Module Far-Library
+    Clear-Host
+    $ver = "0.5.2"
+    $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
     
     
-
-
-# Ending Function
-function ending {
-    Write-host "Far-Resolver finalizado" -ForegroundColor Green
-    $null = Read-Host "Presione cualquier tecla para salir"
-    break
-    exit
-}
-
-
-# Parse Check #######################
-$script:OSVersion = (get-itemproperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
-$script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
-    Write-Host "You didn't run FAR-Resolver as an Administrator. FAR-Resolver will self elevate to run as an Administrator and continue."
-    Start-Sleep 1
-    Write-Host "                                               3"
-    Start-Sleep 1
-    Write-Host "                                               2"
-    Start-Sleep 1
-    Write-Host "                                               1"
-    Start-Sleep 1
-    Start-Process powershell.exe -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath) -Verb RunAs
-    Exit
-}
-    
-    
-$errorcounter = 0
-write-host "Far-Resolver Integrity Check:"
-$elevated = ([Security.Principal.WindowsPrincipal] `
-        [Security.Principal.WindowsIdentity]::GetCurrent()
-).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-    
-if ($elevated -eq $true) {
-    write-host "Elevated: Yes" -ForegroundColor Green
-}
-else {
-    write-warning "Elevated: No"
-    $errorcounter++
-}
-    
-    
-    
-    
-    
-if (-not(test-path -path "Far-Library.psm1")) {
-    Write-Warning "Falta Far-Library"
-    Write-host "Descargando..."
-    Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "Far-Library.psm1"
-    if ($?) {
-        Import-Module .\Far-Library.psm1
+    # Parse Check #######################
+    $script:OSVersion = (get-itemproperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
+    $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+    If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
+        Write-Host "You didn't run FAR-Resolver as an Administrator. FAR-Resolver will self elevate to run as an Administrator and continue."
+        Start-Sleep 1
+        Write-Host "                                               3"
+        Start-Sleep 1
+        Write-Host "                                               2"
+        Start-Sleep 1
+        Write-Host "                                               1"
+        Start-Sleep 1
+        Start-Process powershell.exe -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath) -Verb RunAs
+        Exit
     }
-    else {
-        Write-Warning "Ha ocurrido un error al descargar Far-Library"
-        Write-host "Descarguelo manualmente"
-        write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
-        exit
-    }
-}
-else {
-    Import-Module .\Far-Library.psm1
-    if (-not($?)) {
-        Write-Warning "El modulo Far-Library no ha cargado"
+    
+    
+    $errorcounter = 0
+    write-host "Far-Resolver Integrity Check:"
+    $elevated = ([Security.Principal.WindowsPrincipal] `
+            [Security.Principal.WindowsIdentity]::GetCurrent()
+    ).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    
+    if($elevated -eq $true){
+        write-host "Elevated: Yes" -ForegroundColor Green
+    } else {
+        write-warning "Elevated: No"
         $errorcounter++
     }
-}
-    
-    
-    
-if (-not($OSVersion -match "Windows")) {
-    # Check OS
-    Write-host "Sistema Operativo $OSVersion"
-    Write-Warning "No se detecta O.S Windows"
-    $errorcounter++
-}
-else {
-    Write-host "Sistema Operativo $OSVersion"
-    Write-host "O.S OK" -ForegroundColor Green
-}
-""
-if (-not($architectureproc -match "64")) {
-    # Check Bits
-    Write-host "Arquitectura CPU: $architectureproc"
-    Write-Warning "64 Bits CPU Not detected"
-    $errorcounter++
-}
-else {
-    Write-host "Arquitectuta CPU: $architectureproc"
-    Write-host "64 Bits OK" -ForegroundColor Green
-}
-""
-    
-    
-    
-# Directory Parse ################################
-if (-not(test-path -path plugins)) {
-    # Check Plugins Dir
-    Write-Warning "Plugins Folder not found"
-}
-else {
-    $countps1 = Get-ChildItem plugins\*.ps1 -Recurse -File | Measure-Object | Select-Object Count
-    write-host "Plugins: " $countps1.count
-    Write-Host "Plugins OK" -ForegroundColor Green
-}
-""
-    
-    
-    
-# Command Parse #####################################
-if (-not(Get-Command git -ErrorAction SilentlyContinue)) {
-    Write-Warning "Git not installed"
-    $errorcounter++
-}
-else {
-    Write-host "Git OK" -ForegroundColor Green
-}
-""
-if (-not(Get-Command winget -ErrorAction SilentlyContinue)) {
-    Write-Warning "Winget not detected"
-    $errorcounter++
-}
-else {
-    write-host "Winget OK" -ForegroundColor Green
-}
-""
-write-host "Powershell Version: " (($PSVersionTable).PSVersion)
-    
-    
-    
-# Stop si detecta porlomenos 1 error, para depurar errores
-Write-host ""
-if (-not($errorcounter -eq 0)) {
-    Write-Warning "Errores detectados: $errorcounter"
-    Write-Warning "Hay errores de integridad, funcionalidad limitada"
-    write-host ""
-    $continue = read-host "Proceder de todos modos? NO RECOMENDABLE [continue]"
-    if (-not($continue -eq "continue")) {
-        Write-Warning "Ejecuccion cancelada"
-        exit
-    }
-}
-else {
-    pause
-}
     
     
     
     
     
-    
-    
-    
-    
-    
-    
-    
-# MENU PRINCIPAL #####################################
-    
-$while1 = $true
-while ($while1) {
-    clear-host
-    Write-host "Far-Resolver Console Version $ver"
-    if (-not(Get-Module Far-Library)) { Write-Warning "Modulo Far-Library no cargado" }
-    else { FarLibraryVersion }
-    if (-not($errorcounter -eq 0)) { Write-Warning "Ejecutandose con errores de integridad" }
-    if ($gettedGUI) { Write-host "Ultimo plugin ejecutado: $gettedGUI" }
-    write-host ""
-    # Plugins Data Check & Print Data
-    if (test-path -path plugins) {
-        if ($countps1.count -eq 0) {
-            Write-Host "No hay plugins disponibles" -ForegroundColor Yellow
-            $pluginsenable = 0
+    if (-not(test-path -path "Far-Library.psm1")) {
+        Write-Warning "Falta Far-Library"
+        Write-host "Descargando..."
+        Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "Far-Library.psm1"
+        if ($?) {
+            Import-Module .\Far-Library.psm1
         }
         else {
-            write-host "Plugins PS1:" $countps1.count "plugins detectados" -ForegroundColor Magenta
+            Write-Warning "Ha ocurrido un error al descargar Far-Library"
+            Write-host "Descarguelo manualmente"
+            write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
+            exit
         }
     }
-    elseif (-not(Test-Path -path plugins)) {
-        Write-Warning "No se encuentra la carpeta de plugins"
-    }
     else {
-        Write-Warning "Excepcion no controlada al detectar la carpeta de plugins"
+        Import-Module .\Far-Library.psm1
+        if (-not($?)) {
+            Write-Warning "El modulo Far-Library no ha cargado"
+            $errorcounter++
+        }
     }
     
-    write-host ""
-    Write-host "Far-Resolver Main Menu" # Menu principal Far-Resolver ########################################
-    write-host "--------------------------------"
-    if (-not(test-path -path plugins)) {
-        write-host "No hay carpeta de plugins"
-    }
-    elseif (-not($pluginsenable -eq 0)) {
-        write-host "[P] Plugins Launcher" -ForegroundColor Magenta
+    
+    
+    if (-not($OSVersion -match "Windows")) {
+        # Check OS
+        Write-host "Sistema Operativo $OSVersion"
+        Write-Warning "No se detecta O.S Windows"
+        $errorcounter++
     }
     else {
-        write-host "No hay ningun plugin en la carpeta plugins"
+        Write-host "Sistema Operativo $OSVersion"
+        Write-host "O.S OK" -ForegroundColor Green
     }
-    Write-host "[1] Windows Repair" -ForegroundColor Cyan
-    write-host "[2] Reparacion individual" -ForegroundColor Cyan
-    write-host ""
-    write-host "[A] Actualizar/Obtener" -ForegroundColor Yellow
-    write-host "[N] Plugins Online" -ForegroundColor Blue
-    write-host "[L] Far-Library Console" -ForegroundColor Green
-    write-host ""
-    write-host "[X] Exit"
-    $mainmenu = read-host "Selecciona una opcion"
-    switch ($mainmenu) {
-        p {
-            if (-not(Test-Path -path plugins)) {
-                Write-Warning "No se encuentra la carpeta de Plugins"
-                Start-Sleep -s 2
+    ""
+    if (-not($architectureproc -match "64")) {
+        # Check Bits
+        Write-host "Arquitectura CPU: $architectureproc"
+        Write-Warning "64 Bits CPU Not detected"
+        $errorcounter++
+    }
+    else {
+        Write-host "Arquitectuta CPU: $architectureproc"
+        Write-host "64 Bits OK" -ForegroundColor Green
+    }
+    ""
+    
+    
+    
+    # Directory Parse ################################
+    if (-not(test-path -path plugins)) {
+        # Check Plugins Dir
+        Write-Warning "Plugins Folder not found"
+    }
+    else {
+        $countps1 = Get-ChildItem plugins\*.ps1 -Recurse -File | Measure-Object | Select-Object Count
+        write-host "Plugins: " $countps1.count
+        Write-Host "Plugins OK" -ForegroundColor Green
+    }
+    ""
+    
+    
+    
+    # Command Parse #####################################
+    if (-not(Get-Command git -ErrorAction SilentlyContinue)) {
+        Write-Warning "Git not installed"
+        $errorcounter++
+    }
+    else {
+        Write-host "Git OK" -ForegroundColor Green
+    }
+    ""
+    if (-not(Get-Command winget -ErrorAction SilentlyContinue)) {
+        Write-Warning "Winget not detected"
+        $errorcounter++
+    }
+    else {
+        write-host "Winget OK" -ForegroundColor Green
+    }
+    ""
+    write-host "Powershell Version: " (($PSVersionTable).PSVersion)
+    
+    
+    
+    # Stop si detecta porlomenos 1 error, para depurar errores
+    Write-host ""
+    if (-not($errorcounter -eq 0)) {
+        Write-Warning "Errores detectados: $errorcounter"
+        Write-Warning "Hay errores de integridad, funcionalidad limitada"
+        write-host ""
+        $continue = read-host "Proceder de todos modos? NO RECOMENDABLE [continue]"
+        if (-not($continue -eq "continue")) {
+            Write-Warning "Ejecuccion cancelada"
+            exit
+        }
+    }
+    else {
+        pause
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # MENU PRINCIPAL #####################################
+    
+    $while1 = $true
+    while ($while1) {
+        clear-host
+        Write-host "Far-Resolver Console Version $ver"
+        if (-not(Get-Module Far-Library)) { Write-Warning "Modulo Far-Library no cargado" }
+        else { FarLibraryVersion }
+        if (-not($errorcounter -eq 0)) { Write-Warning "Ejecutandose con errores de integridad" }
+        if ($gettedGUI) { Write-host "Ultimo plugin ejecutado: $gettedGUI" }
+        write-host ""
+        # Plugins Data Check & Print Data
+        if (test-path -path plugins) {
+            if ($countps1.count -eq 0) {
+                Write-Host "No hay plugins disponibles" -ForegroundColor Yellow
+                $pluginsenable = 0
             }
             else {
-                Clear-Host
-                write-host "Far-Resolver Plugins Launcher" -ForegroundColor Magenta
-                write-host "--------------------------------"
-                $gettedGUI = Get-ChildItem plugins | Out-GridView -Title 'Plugins Launcher' -OutputMode Single
-                if ($?) {
-                    if ($null -eq $gettedGUI) {
-                        Write-Warning "No se ha seleccionado nada o se ha cancelado"
-                        write-host ""
-                        Pause
-                    }
-                    else {
-                        & .\plugins\$gettedGUI
-                        if ($?) {
-                            write-host "---------------------------------------------"
-                            Write-host "Plugin ejecutado correctamente" -ForegroundColor Green
-                            Write-host "Ultimo plugin ejecutado: $gettedGUI"
-                            write-host ""
-                            pause
-                        }
-                        else {
-                            Write-host "El Plugin ha devuelto errores en la ejecuccion"
-                            write-host "Ultimo plugin ejecutado: $gettedGUI"
-                            write-host ""
-                            pause
-                        }
-                    }
+                write-host "Plugins PS1:" $countps1.count "plugins detectados" -ForegroundColor Magenta
+            }
+        }
+        elseif (-not(Test-Path -path plugins)) {
+            Write-Warning "No se encuentra la carpeta de plugins"
+        }
+        else {
+            Write-Warning "Excepcion no controlada al detectar la carpeta de plugins"
+        }
+    
+        write-host ""
+        Write-host "Far-Resolver Main Menu" # Menu principal Far-Resolver ########################################
+        write-host "--------------------------------"
+        if (-not(test-path -path plugins)) {
+            write-host "No hay carpeta de plugins"
+        }
+        elseif (-not($pluginsenable -eq 0)) {
+            write-host "[P] Plugins Launcher" -ForegroundColor Magenta
+        }
+        else {
+            write-host "No hay ningun plugin en la carpeta plugins"
+        }
+        Write-host "[1] Windows Repair" -ForegroundColor Cyan
+        write-host "[2] Reparacion individual" -ForegroundColor Cyan
+        write-host ""
+        write-host "[A] Actualizar/Obtener" -ForegroundColor Yellow
+        write-host "[N] Plugins Online" -ForegroundColor Blue
+        write-host "[L] Far-Library Console" -ForegroundColor Green
+        write-host ""
+        write-host "[X] Exit"
+        $mainmenu = read-host "Selecciona una opcion"
+        switch ($mainmenu) {
+            p {
+                if (-not(Test-Path -path plugins)) {
+                    Write-Warning "No se encuentra la carpeta de Plugins"
+                    Start-Sleep -s 2
                 }
                 else {
-                    Write-Warning "Hay un error la obtener la lista de plugins..."
-                    pause
-                }
-            }
-        }
-    
-        1 {
-            Write-Warning "Esta operacion puede durar mucho tiempo"
-            $continue = Read-Host "Si estas seguro de proceder, escribe [repairstart]"
-            if ($continue -eq "repairstart") {
-                Clear-host
-                windowsrepair
-                exit
-            }
-            else {
-                Write-host "Operacion no confirmada"
-                Start-Sleep -s 4
-            }
-        }
-    
-        2 {
-            Clear-Host
-            individualrepair
-        }
-    
-        a {
-            $while2 = $true
-            while ($while2) {
-                Clear-Host
-                write-host "Actualizador Far-Resolver" -ForegroundColor Yellow
-                write-host "Version del modulo principal: $ver"
-                write-host "Version de Far-Library $farlibraryver"
-                write-host "-------------------------------------------"
-                write-host ""
-                write-host "[1] Actualizar Far-Resolver (Modulo principal y Library)"
-                write-host "[2] Git Clone (Full Redownload Far-Resolver)"
-                write-host "[3] Instalar Winget"
-                write-host "[4] Instalar Git"
-                write-host "[5] Actualizar Far-Library"
-                write-host "[6] Actualizar ayuda de PowerShell"
-                write-host ""
-                write-host "[X] Volver a Menu Principal"
-                $option = read-host "Selecciona una opcion"
-                switch ($option) {
-                    1 {
-                        write-host ""
-                        write-host "Actualizando Far-Resolver" -ForegroundColor Yellow
-                        Invoke-WebRequest "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Resolver.ps1" -OutFile "temp.ps1"
-                        if ($?) {
-                            Remove-Item "Far-Resolver.ps1"
-                            Rename-Item "temp.ps1" "Far-Resolver.ps1"
-                            write-host "Far-Resolver actualizado" -ForegroundColor Green
+                    Clear-Host
+                    write-host "Far-Resolver Plugins Launcher" -ForegroundColor Magenta
+                    write-host "--------------------------------"
+                    $gettedGUI = Get-ChildItem plugins | Out-GridView -Title 'Plugins Launcher' -OutputMode Single
+                    if ($?) {
+                        if ($null -eq $gettedGUI) {
+                            Write-Warning "No se ha seleccionado nada o se ha cancelado"
+                            write-host ""
+                            Pause
                         }
                         else {
-                            Write-Warning "Error al actualizar"
-                        }
-                        Remove-Module Far-Library
-                        clear-host
-                        Write-host "Actualizando Far-Library..."
-                        Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "temp.psm1"
-                        if ($?) {
-                            Remove-Item "Far-Library.psm1"
-                            Rename-Item "temp.psm1" "Far-Library.psm1"
-                            Write-host "Far-Library actualizado" -ForegroundColor Green
-                            Write-host "Actualizacion finalizada" -ForegroundColor Green
-                            write-host "Reinicie Far-Resolver"
-                            exit
-                        }
-                        else {
-                            Write-Warning "Ha ocurrido un error al descargar Far-Library"
-                            Write-host "Descarguelo manualmente"
-                            write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
-                            pause
-                        }
-                        ""
-                        pause
-                    }
-                    2 {
-                        if (-not(get-command git -ErrorAction SilentlyContinue)) {
-                            write-warning "No esta disponible Git, no se puede descargar la lista de plugins"
-                        }
-                        else {
-                            write-host "Descargando repositorio..."
-                            Set-Location ..
-                            git clone "htts://github.com/contratop/Far-Resolver"
-                            write-host "Descarga finalizada" -ForegroundColor Green
-                        }
-                        ""
-                        pause
-                    }
-                    3 {
-                        wingetupgrade
-                    }
-                    4 {
-                        if (Get-Command git -ErrorAction SilentlyContinue) {
-                            Write-host "Winget ya esta instalado en el equipo" -ForegroundColor Green
-                        }
-                        elseif (Get-Command winget -ErrorAction SilentlyContinue) {
-                            write-host "Instalando Git..."
-                            winget install git.git
-                            if (-not($?)) {
-                                Write-Warning "Error al instalar Git"
+                            & .\plugins\$gettedGUI
+                            if ($?) {
+                                write-host "---------------------------------------------"
+                                Write-host "Plugin ejecutado correctamente" -ForegroundColor Green
+                                Write-host "Ultimo plugin ejecutado: $gettedGUI"
+                                write-host ""
+                                pause
                             }
                             else {
-                                Write-host "Instalacion de Git completada correctamente" -ForegroundColor Green
+                                Write-host "El Plugin ha devuelto errores en la ejecuccion"
+                                write-host "Ultimo plugin ejecutado: $gettedGUI"
+                                write-host ""
+                                pause
                             }
                         }
-                        elseif (-not(Get-Command winget -ErrorAction SilentlyContinue)) {
-                            Write-Warning "No se puede instalar Git"
-                            Write-host "Winget no esta disponible"
-                        }
-                        else {
-                            Write-Warning "Error no especificado (Desbordamiento)"
-                        }
-    
-                        ""
+                    }
+                    else {
+                        Write-Warning "Hay un error la obtener la lista de plugins..."
                         pause
-                    }
-                    5 {
-                        Remove-Module Far-Library
-                        clear-host
-                        Write-host "Actualizando Far-Library..."
-                        Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "temp.psm1"
-                        if ($?) {
-                            Remove-Item "Far-Library.psm1"
-                            Rename-Item "temp.psm1" "Far-Library.psm1"
-                            Write-host "Actualizacion finalizada" -ForegroundColor Green
-                            write-host "Reinicie Far-Resolver"
-                            exit
-                        }
-                        else {
-                            Write-Warning "Ha ocurrido un error al descargar Far-Library"
-                            Write-host "Descarguelo manualmente"
-                            write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
-                            pause
-                        }
-                    }
-                    6 {
-                        write-host ""
-                        write-host "Actualizando ayuda de PowerShell"
-                        Update-Help
-                        if (-not($?)) {
-                            Write-Warning "Ha ocurrido un error durante la actualizacion"
-                        }
-                        else {
-                            write-host "Actualizacion completada" -ForegroundColor Green
-                        }
-                        pause
-                    }
-                    x {
-                        $while2 = $false
-                    }
-                    default {
-                        Write-Warning "Opcion no valida"
-                        start-sleep -s 2
                     }
                 }
             }
-        }
     
-    
-        n {
-            Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/contratop/Far-Resolver/main/onlineplugins.ps1" | Invoke-Expression
-            if (-not($?)) {
-                Write-Warning "Error de ejecucion"
+            1 {
+                Write-Warning "Esta operacion puede durar mucho tiempo"
+                $continue = Read-Host "Si estas seguro de proceder, escribe [repairstart]"
+                if ($continue -eq "repairstart") {
+                    Clear-host
+                    windowsrepair
+                    exit
+                }
+                else {
+                    Write-host "Operacion no confirmada"
+                    Start-Sleep -s 4
+                }
             }
-            pause
-        }
     
-        l {
-            Clear-Host
-            FarLibraryVersion
-            if (-not($?)) {
-                Write-Warning "Error de ejecucion"
+            2 {
+                Clear-Host
+                individualrepair
             }
-            write-host "Comandos disponibles en Far-Library"
-            write-host "-----------------------------------"
-            Get-Command -Module Far-Library
-            write-host ""
-            read-host "Presione cualquier tecla para salir a consola"
-            exit
+    
+            a {
+                $while2 = $true
+                while ($while2) {
+                    Clear-Host
+                    write-host "Actualizador Far-Resolver" -ForegroundColor Yellow
+                    write-host "Version del modulo principal: $ver"
+                    write-host "Version de Far-Library $farlibraryver"
+                    write-host "-------------------------------------------"
+                    write-host ""
+                    write-host "[1] Actualizar Far-Resolver (Modulo principal y Library)"
+                    write-host "[2] Git Clone (Full Redownload Far-Resolver)"
+                    write-host "[3] Instalar Winget"
+                    write-host "[4] Instalar Git"
+                    write-host "[5] Actualizar Far-Library"
+                    write-host "[6] Actualizar ayuda de PowerShell"
+                    write-host ""
+                    write-host "[X] Volver a Menu Principal"
+                    $option = read-host "Selecciona una opcion"
+                    switch ($option) {
+                        1 {
+                            write-host ""
+                            write-host "Actualizando Far-Resolver" -ForegroundColor Yellow
+                            Invoke-WebRequest "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Resolver.ps1" -OutFile "temp.ps1"
+                            if ($?) {
+                                Remove-Item "Far-Resolver.ps1"
+                                Rename-Item "temp.ps1" "Far-Resolver.ps1"
+                                write-host "Far-Resolver actualizado" -ForegroundColor Green
+                            }
+                            else {
+                                Write-Warning "Error al actualizar"
+                            }
+                            Remove-Module Far-Library
+                            clear-host
+                            Write-host "Actualizando Far-Library..."
+                            Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "temp.psm1"
+                            if ($?) {
+                                Remove-Item "Far-Library.psm1"
+                                Rename-Item "temp.psm1" "Far-Library.psm1"
+                                Write-host "Far-Library actualizado" -ForegroundColor Green
+                                Write-host "Actualizacion finalizada" -ForegroundColor Green
+                                write-host "Reinicie Far-Resolver"
+                                exit
+                            }
+                            else {
+                                Write-Warning "Ha ocurrido un error al descargar Far-Library"
+                                Write-host "Descarguelo manualmente"
+                                write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
+                                pause
+                            }
+                            ""
+                            pause
+                        }
+                        2 {
+                            if (-not(get-command git -ErrorAction SilentlyContinue)) {
+                                write-warning "No esta disponible Git, no se puede descargar la lista de plugins"
+                            }
+                            else {
+                                write-host "Descargando repositorio..."
+                                Set-Location ..
+                                git clone "htts://github.com/contratop/Far-Resolver"
+                                write-host "Descarga finalizada" -ForegroundColor Green
+                            }
+                            ""
+                            pause
+                        }
+                        3 {
+                            wingetupgrade
+                        }
+                        4 {
+                            if (Get-Command git -ErrorAction SilentlyContinue) {
+                                Write-host "Winget ya esta instalado en el equipo" -ForegroundColor Green
+                            }
+                            elseif (Get-Command winget -ErrorAction SilentlyContinue) {
+                                write-host "Instalando Git..."
+                                winget install git.git
+                                if (-not($?)) {
+                                    Write-Warning "Error al instalar Git"
+                                }
+                                else {
+                                    Write-host "Instalacion de Git completada correctamente" -ForegroundColor Green
+                                }
+                            }
+                            elseif (-not(Get-Command winget -ErrorAction SilentlyContinue)) {
+                                Write-Warning "No se puede instalar Git"
+                                Write-host "Winget no esta disponible"
+                            }
+                            else {
+                                Write-Warning "Error no especificado (Desbordamiento)"
+                            }
+    
+                            ""
+                            pause
+                        }
+                        5 {
+                            Remove-Module Far-Library
+                            clear-host
+                            Write-host "Actualizando Far-Library..."
+                            Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "temp.psm1"
+                            if ($?) {
+                                Remove-Item "Far-Library.psm1"
+                                Rename-Item "temp.psm1" "Far-Library.psm1"
+                                Write-host "Actualizacion finalizada" -ForegroundColor Green
+                                write-host "Reinicie Far-Resolver"
+                                exit
+                            }
+                            else {
+                                Write-Warning "Ha ocurrido un error al descargar Far-Library"
+                                Write-host "Descarguelo manualmente"
+                                write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
+                                pause
+                            }
+                        }
+                        6 {
+                            write-host ""
+                            write-host "Actualizando ayuda de PowerShell"
+                            Update-Help
+                            if (-not($?)) {
+                                Write-Warning "Ha ocurrido un error durante la actualizacion"
+                            }
+                            else {
+                                write-host "Actualizacion completada" -ForegroundColor Green
+                            }
+                            pause
+                        }
+                        x {
+                            $while2 = $false
+                        }
+                        default {
+                            Write-Warning "Opcion no valida"
+                            start-sleep -s 2
+                        }
+                    }
+                }
+            }
+    
+    
+            n {
+                Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/contratop/Far-Resolver/main/onlineplugins.ps1" | Invoke-Expression
+                if (-not($?)) {
+                    Write-Warning "Error de ejecucion"
+                }
+                pause
+            }
+    
+            l {
+                Clear-Host
+                FarLibraryVersion
+                if (-not($?)) {
+                    Write-Warning "Error de ejecucion"
+                }
+                write-host "Comandos disponibles en Far-Library"
+                write-host "-----------------------------------"
+                Get-Command -Module Far-Library
+                write-host ""
+                read-host "Presione cualquier tecla para salir a consola"
+                exit
     
     
     
+            }
+    
+            x {
+                write-host "Far-resolver finalizado por el usuario (opcion X)" -ForegroundColor Yellow
+                exit
+            }
+    
+            default {
+                Write-Warning "Opcion no reconocida"
+                Start-Sleep -s 2
+            }
         }
     
-        x {
-            write-host "Far-resolver finalizado por el usuario (opcion X)" -ForegroundColor Yellow
-            exit
-        }
     
-        default {
-            Write-Warning "Opcion no reconocida"
-            Start-Sleep -s 2
-        }
+    
     }
     
-    
-    
 }
-    
+finally {
+    Write-host "Far-Resolver finalizado" -ForegroundColor Green
+    $null = Read-Host "Presione cualquier tecla para salir"
+    exit
+}
