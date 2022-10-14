@@ -3,7 +3,7 @@ try {
     # Header  ##########################
     Remove-Module Far-Library
     Clear-Host
-    $ver = "0.5.2"
+    $ver = "0.6"
     $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
     
     
@@ -30,9 +30,10 @@ try {
             [Security.Principal.WindowsIdentity]::GetCurrent()
     ).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     
-    if($elevated -eq $true){
+    if ($elevated -eq $true) {
         write-host "Elevated: Yes" -ForegroundColor Green
-    } else {
+    }
+    else {
         write-warning "Elevated: No"
         $errorcounter++
     }
@@ -52,7 +53,8 @@ try {
             Write-Warning "Ha ocurrido un error al descargar Far-Library"
             Write-host "Descarguelo manualmente"
             write-host "https://github.com/contratop/Far-Resolver/blob/main/Far-Library.psm1"
-            exit
+            Write-Warning "El modulo Far-Library no ha cargado"
+            $errorcounter++
         }
     }
     else {
@@ -194,6 +196,7 @@ try {
         }
         Write-host "[1] Windows Repair" -ForegroundColor Cyan
         write-host "[2] Reparacion individual" -ForegroundColor Cyan
+        write-host "[3] Aprovisionar sistema" -ForegroundColor Cyan
         write-host ""
         write-host "[A] Actualizar/Obtener" -ForegroundColor Yellow
         write-host "[N] Plugins Online" -ForegroundColor Blue
@@ -387,6 +390,379 @@ try {
                         }
                         x {
                             $while2 = $false
+                        }
+                        default {
+                            Write-Warning "Opcion no valida"
+                            start-sleep -s 2
+                        }
+                    }
+                }
+            }
+
+            3 {
+                $whileselectos = $true
+                while ($whileselectos) {
+                    claer-host
+                    write-host "Elige sistema operativo Target"
+                    write-host "---------------------------------"
+                    write-host "[1] Windows 7 o inferior"
+                    write-host "[2] Windows 10 o superior"
+                    write-host ""
+                    write-host "[X] Volver a Menu Principal"
+                    $selection = read-host "Selecciona una opcion"
+                    switch ($selection) {
+                        1 {
+                            $os = "win7"
+                            $os
+                            $whileselectos = $false
+                        }
+                        2 {
+                            # Setup Assistant for new Windows 10/11 Installations
+	
+                            Clear-Host
+	
+	
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Check information)"
+	
+                            write-host "Comprobando estado del modulo Far-Library"
+	
+                            if (Get-Module -ListAvailable -Name Far-Library) {
+                                write-host "Far-Library esta instalado correctamente" -ForegroundColor Green
+                            }
+                            else {
+                                write-host "Far-Library no esta instalado, instalando..."
+                                Write-Warning "Falta Far-Library"
+                                Write-host "Descargando..."
+                                Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "Far-Library.psm1"
+                                if (-not($?)) {
+                                    Write-Warning "Error de descarga"
+                                    pause
+                                    break
+                                }
+                                else {
+                                    Write-host "Descarga completada"
+                                    Write-host "Implementando..."
+                                    Import-Module .\Far-Library.psm1
+                                    if (-not($?)) {
+                                        Write-Warning "Error de implementacion"
+                                        Pause
+                                        break
+                                    }
+                                    else {
+                                        Write-host "Instalacion completada" -ForegroundColor Green
+                                        $null = read-host "Presiona cualquier tecla para continuar"
+                                    }
+                                }
+                            }
+	
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 0/8 | Drivers Assistant)"
+                            write-host "Soluciones de drivers"
+                            write-host "-----------------------------------"
+                            write-host "[1] Dejar que Windows Update descargue los Drivers / Default"
+                            write-host "[2] Descargar Snappy Driver en este equipo (Sin USB)"
+                            write-host "[3] USB Snappy de Contratop (Conectar USB de admin ContratopDev)"
+                            $DriversSolution = Read-Host "Selecciona una opcion"
+                            if ($DriversSolution -eq "1") {
+                                write-host "Dejando que Windows Update descargue los Drivers"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($DriversSolution -eq "2") {
+                                write-host "Descargando Snappy Driver"
+                                Invoke-WebRequest -uri "http://dl.drp.su/17-online/DriverPack-17-Online_from_SDI-tools.exe" -OutFile "snapdrvinst.exe"
+                                if (-not($?)) {
+                                    Write-Warning "Error de descarga"
+                                    pause
+                                    break
+                                }
+                                else {
+                                    Write-host "Descarga completada"
+                                    Write-host "Ejecutando Snappy Driver"
+                                    Start-Process -FilePath "snapdrvinst.exe"
+                                    $null = read-host "Cuando finalize la instalacion de Drivers. pulsa cualquier tecla para continuar"
+                                }
+                            }
+                            elseif ($DriversSolution -eq "3") {
+                                # Desarrollar esta parte en casa #########################################################################################
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] No realizar nada"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+	
+                            ###### FASE 1 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 1/8 | Windows Activation)"
+                            write-host "Deseas realizar una activacion de Windows?"
+                            write-host "-----------------------------------"
+                            write-host "[1] No / Default"
+                            write-host "[2] Activacion Classic (Windows 10/11)"
+                            $selection = Read-Host "Selecciona una opcion"
+                            if ($selection -eq "1") {
+                                write-host "No se realizara ninguna activacion"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($selection -eq "2") {
+                                write-host "Iniciando activacion de Windows"
+                                activatekms classic
+                                write-host "Far-Resolver ha finalizado la funcion (ActivateKMS)"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] No"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+                            ###### FASE 2 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 2/8 | Office)"
+                            write-host "Deseas desplegar Office?"
+                            write-host "-----------------------------------"
+                            write-host "[1] No / Default"
+                            write-host "[2] Desplegar Office"
+                            $selection = Read-Host "Selecciona una opcion"
+                            if ($selection -eq "1") {
+                                write-host "No se desplegara Office"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($selection -eq "2") {
+                                Write-host "Iniciando despliegue de Office"
+                                deployoffice
+                                write-host "Far-Resolver ha finalizado la funcion (DeployOffice)"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] No"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+                            ###### FASE 3 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 3/8 | Winget)"
+                            Write-host "Comprobando estado de Winget"
+                            wingetupgrade
+                            write-host "Far-Resolver ha finalizado la funcion (WingetUpgrade)"
+                            $null = read-host "Presiona cualquier tecla para continuar"
+	
+                            ###### FASE 4 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 4/8 | Navegadores)"
+                            write-host "Elige tu navegador favorito"
+                            write-host "-----------------------------------"
+                            write-host "[1] Microsoft Edge / Default"
+                            write-host "[2] Google Chrome"
+                            write-host "[3] Mozilla Firefox"
+                            write-host "[4] Opera GX"
+                            $selection = Read-Host "Selecciona una opcion"
+                            if ($selection -eq "1") {
+                                write-host "Microsoft Edge sera tu navegador por defecto"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($selection -eq "2") {
+                                write-host "Descargando Google Chrome"
+                                winget install google.Chrome
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "Google Chrome ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            elseif ($selection -eq "3") {
+                                write-host "Descargando Mozilla Firefox"
+                                winget install Mozilla.Firefox
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "Mozilla Firefox ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            elseif ($selection -eq "4") {
+                                write-host "Descargando Opera GX"
+                                winget install Opera.OperaGX
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "Opera GX ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] Microsoft Edge"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+                            ###### FASE 5 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 5/8 | Descompresor)"
+                            write-host "Elige tu descompresor favorito"
+                            write-host "-----------------------------------"
+                            write-host "[1] WindowsZIP / Default"
+                            write-host "[2] 7-Zip"
+                            write-host "[3] WinRAR"
+                            $selection = Read-Host "Selecciona una opcion"
+                            if ($selection -eq "1") {
+                                write-host "El descompresor por defecto de Windows sera tu descompresor por defecto"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($selection -eq "2") {
+                                write-host "Descargando 7-Zip"
+                                winget install 7zip.7zip
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "7-Zip ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            elseif ($selection -eq "3") {
+                                write-host "Descargando WinRAR"
+                                winget install WinRAR.WinRAR
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "WinRAR ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] WindowsZIP"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+                            ###### FASE 6 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 6/8 | IDE)"
+                            write-host "Elige tu IDE favorito"
+                            write-host "-----------------------------------"
+                            write-host "[1] PowerShell ISE / Default"
+                            write-host "[2] Visual Studio Code"
+                            write-host "[3] Notepad++"
+                            $selection = Read-Host "Selecciona una opcion"
+                            if ($selection -eq "1") {
+                                write-host "El IDE por defecto de Windows sera tu IDE por defecto"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($selection -eq "2") {
+                                write-host "Descargando Visual Studio Code"
+                                winget install Microsoft.VisualStudioCode
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "Visual Studio Code ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            elseif ($selection -eq "3") {
+                                write-host "Descargando Notepad++"
+                                winget install "Notepad++.Notepad++"
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "Notepad++ ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] PowerShell ISE"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+                            ###### FASE 7 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 7/8 | Multimedia)"
+                            write-host "Deseas instalar VLC?"
+                            write-host "-----------------------------------"
+                            write-host "[1] No (Windows Media Player) / Default"
+                            write-host "[2] Si (VLC)"
+                            $selection = Read-Host "Selecciona una opcion"
+                            if ($selection -eq "1") {
+                                write-host "Windows Media Player sera tu reproductor multimedia por defecto"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($selection -eq "2") {
+                                write-host "Descargando VLC"
+                                winget install VideoLAN.VLC
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "VLC ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] No (Windows Media Player)"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+                            ###### FASE 8 #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (Step 8/8 | Mensajeria)"
+                            write-host "Elige tu plataforma de mensajeria favorita"
+                            write-host "-----------------------------------"
+                            write-host "[1] Windows Default / Default"
+                            write-host "[2] Telegram"
+                            $selection = Read-Host "Selecciona una opcion"
+                            if ($selection -eq "1") {
+                                write-host "Windows Default sera tu plataforma de mensajeria por defecto"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+                            elseif ($selection -eq "2") {
+                                write-host "Descargando Telegram"
+                                winget install Telegram.TelegramDesktop
+                                if (-not($?)) {
+                                    Write-Warning Ha ocurrido un error en la Instalacion
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                                else {
+                                    write-host "Telegram ha sido instalado"
+                                    $null = read-host "Presiona cualquier tecla para continuar"
+                                }
+                            }
+                            else {
+                                Write-host "No se ha seleccionano una opcion valida"
+                                write-host "Opcion por defecto: [1] Windows Default"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+	
+                            ###### FIN #################################################
+                            Clear-Host
+                            $host.UI.RawUI.windowTitle = "Setup Assistant (FINALIZADO)"
+                            write-host "El asistente de configuracion ha finalizado" -ForegroundColor Green
+                            $null = read-host "Presiona cualquier tecla para continuar"
+                            Clear-Host
+                            $whileselectos = $false
+	
+                        }
+
+                        x {
+                            write-host "Volviendo al menu principal"
+                            $whileselectos = $false
                         }
                         default {
                             Write-Warning "Opcion no valida"
