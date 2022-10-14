@@ -36,13 +36,18 @@ function downgradestart {
 
 
 $host.ui.rawui.WindowTitle = "Admin Downgrader"
-if ($elevated) {
+if ($elevated -eq $true) {
     Write-Host "You are an administrator" -ForegroundColor Green
     downgradestart
     $null = read-host "Enter any key to exit"
     exit
 }
-else {
+elseif ($elevated -eq $false) {
     Write-Host "You are not an administrator" -ForegroundColor Yellow
     write-host "Execute as administrator" -ForegroundColor Yellow
 }
+else{
+    Write-warning "Error to read admin privileges"
+}
+
+$null = read-host "AdminDowngrade Finished, Press any key to exit"
