@@ -1,15 +1,9 @@
 # Jailbreak exploit Windows CMD Administrator
 
 Clear-Host
-<#Construccion del payload: Fases
-
-Fase 1: Crear un archivo .bat
-Fase 2: Escribir en el header, la informacion del exploit
-Fase 3: Obtener toda la lista
 
 
 
-#>
 $host.UI.RawUI.WindowTitle = "Jailbreak exploit Windows CMD Administrator"
 
 write-host "Jailbreak exploit Windows CMD Administrator"
