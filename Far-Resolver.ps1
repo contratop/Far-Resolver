@@ -25,6 +25,21 @@ If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 
 $errorcounter = 0
 write-host "Far-Resolver Integrity Check:"
+$elevated = ([Security.Principal.WindowsPrincipal] `
+        [Security.Principal.WindowsIdentity]::GetCurrent()
+).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if($elevated -eq $true){
+    write-host "Elevated: Yes" -ForegroundColor Green
+} else {
+    write-warning "Elevated: No"
+    $errorcounter++
+}
+
+
+
+
+
 if (-not(test-path -path "Far-Library.psm1")) {
     Write-Warning "Falta Far-Library"
     Write-host "Descargando..."
@@ -43,7 +58,7 @@ else {
     Import-Module .\Far-Library.psm1
     if (-not($?)) {
         Write-Warning "El modulo Far-Library no ha cargado"
-        $errorcounter = $errorcounter + 1
+        $errorcounter++
     }
 }
 
@@ -53,7 +68,7 @@ if (-not($OSVersion -match "Windows")) {
     # Check OS
     Write-host "Sistema Operativo $OSVersion"
     Write-Warning "No se detecta O.S Windows"
-    $errorcounter = $errorcounter + 1
+    $errorcounter++
 }
 else {
     Write-host "Sistema Operativo $OSVersion"
@@ -64,7 +79,7 @@ if (-not($architectureproc -match "64")) {
     # Check Bits
     Write-host "Arquitectura CPU: $architectureproc"
     Write-Warning "64 Bits CPU Not detected"
-    $errorcounter = $errorcounter + 1
+    $errorcounter++
 }
 else {
     Write-host "Arquitectuta CPU: $architectureproc"
@@ -91,7 +106,7 @@ else {
 # Command Parse #####################################
 if (-not(Get-Command git -ErrorAction SilentlyContinue)) {
     Write-Warning "Git not installed"
-    $errorcounter = $errorcounter + 1
+    $errorcounter++
 }
 else {
     Write-host "Git OK" -ForegroundColor Green
@@ -99,7 +114,7 @@ else {
 ""
 if (-not(Get-Command winget -ErrorAction SilentlyContinue)) {
     Write-Warning "Winget not detected"
-    $errorcounter = $errorcounter + 1
+    $errorcounter++
 }
 else {
     write-host "Winget OK" -ForegroundColor Green

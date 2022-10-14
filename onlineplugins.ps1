@@ -1,5 +1,5 @@
 clear-host
-$onlinepluginver = "0.2.2"
+$onlinepluginver = "0.3"
 
 
 ## Plugins database ##
