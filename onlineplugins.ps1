@@ -17,7 +17,7 @@ $pluginsurlraw2 = "https://github.com/contratop/Far-Resolver/raw/main/plugins/De
 # Plugin 3 (Admin Downgrader)
 $pluginname3 = "Admin Downgrader"
 $pluginsauthor3 = "@ContratopDev"
-$pluginsurlraw3 = "Not Set" # PENDING SETTING
+$pluginsurlraw3 = "https://github.com/contratop/Far-Resolver/raw/main/plugins/AdminDowngrader.ps1Not Set" # PENDING SETTING
 
 
 
