@@ -3,7 +3,7 @@ try {
     # Header  ##########################
     Remove-Module Far-Library
     Clear-Host
-    $ver = "0.6"
+    $ver = "0.7"
     $Host.UI.RawUI.WindowTitle = "Far Resolver Ver. $ver"
     
     
@@ -412,9 +412,157 @@ try {
                     $selection = read-host "Selecciona una opcion"
                     switch ($selection) {
                         1 {
-                            $os = "win7"
-                            $os
-                            $whileselectos = $false
+                            Clear-Host
+                            <# Desplegar Cofiguracion inicial WIndows 7
+
+1- Ofrecer activacion del sistema
+2- Ofrecer desplegamiento de Office
+3- Desplegar Navegador Chrome (A eleccion)
+4- Desplegar 7zip (A eleccion)
+
+#>
+
+                            $host.UI.RawUI.WindowTitle = "Windows 7 Setup Assistant (Check Information"
+
+                            write-host "Comprobando estado del modulo Far-Library"
+
+                            if (Get-Module -ListAvailable -Name Far-Library) {
+                                write-host "Modulo Far-Library cargado"
+                            }
+                            else {
+                                write-host "Far-Library no esta instalado, Instalando.."
+                                Write-Warning "Falta Far-Library"
+                                write-host "Descargando..."
+                                Invoke-WebRequest -uri "https://raw.githubusercontent.com/contratop/Far-Resolver/main/Far-Library.psm1" -OutFile "Far-Library.psm1"
+                                if (-not($?)) {
+                                    write-host "Error al descargar Far-Library"
+                                    Pause
+                                    break
+                                }
+                                else {
+                                    write-host "Descarga completada"
+                                    write-host "Implementando..."
+                                    import-module .\Far-Library.psm1
+                                    if (-not($?)) {
+                                        write-host "Error al implementar Far-Library"
+                                        Pause
+                                        break
+                                    }
+                                    else {
+                                        write-host "Far-Library implementado correctamente" -ForegroundColor Green
+                                        Pause
+                                    }
+                                }
+                            }
+
+                            Clear-Host
+                            $host.UI.RawUI.WindowTitle = "Windows 7 Setup Assistant (Step 1/4 | System Activator)"
+                            write-host "System activator"
+                            write-host "------------------------"
+                            write-host "[1] No activar sistema"
+                            write-host "[2] Activar sistema con KMS"
+                            write-host "[3] Activar sistema con WinLoader (Recomendado)"
+                            $activatorsolution = Read-host "Selecciona una opcion"
+                            if ($activatorsolution -eq 1) {
+                                write-host "No se activara el sistema"
+                            }
+                            elseif ($activatorsolution -eq 2) {
+                                activatekms classic
+                                write-host "Funcion finalizada (activatekms classic)"
+                                $null = Read-host "Presiona una tecla para continuar"
+                            }
+                            elseif ($activatorsolution -eq 3) {
+                                activatekms oem
+                                write-host "Funcion finalizada (activatekms oem)"
+                                $null = Read-host "Presiona una tecla para continuar"
+                            }
+                            else {
+                                write-host "Seleccionando opcion default [1] No activar sistema"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+
+                            $host.UI.RawUI.windowTitle = "Windows 7 Setup Assistant (Step 2/4 | Office Setup)"
+                            write-host "Office Setup"
+                            write-host "------------------------"
+                            write-host "[1] No instalar Office"
+                            write-host "[2] Desplegar Office"
+                            $officesolution = Read-host "Selecciona una opcion"
+                            if ($officesolution -eq 1) {
+                                write-host "No se desplegara Office"
+                            }
+                            elseif ($officesolution -eq 2) {
+                                deployoffice
+                                write-host "Funcion finalizada (deployoffice)"
+                                $null = Read-host "Presiona una tecla para continuar"
+                            }
+                            else {
+                                write-host "Seleccionando opcion default [1] No instalar Office"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+
+                            $host.UI.RawUI.windowTitle = "Windows 7 Setup Assistant (Step 3/4 | Browser Setup)"
+                            write-host "Browser Setup"
+                            write-host "------------------------"
+                            write-host "[1] No instalar navegador"
+                            write-host "[2] Desplegar Chrome"
+                            $browser = Read-host "Selecciona una opcion"
+                            if ($browser -eq 1) {
+                                write-host "No se desplegara navegador"
+                            }
+                            elseif ($browser -eq 2) {
+                                # Descargar Google Chrome para WIndows 7
+                                write-host "Descargando Google Chrome"
+                                Invoke-WebRequest -uri "https://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile "chrome_installer.exe"
+                                if (-not($?)) {
+                                    Write-Warning "Error al descargar Google Chrome"
+                                    write-host "Omitiendo Despliege"
+                                }
+                                else {
+                                    write-host "Descarga completada"
+                                    write-host "Desplegando Google Chrome"
+                                    Start-Process -FilePath ".\chrome_installer.exe"  -Wait
+                                    write-host "Despliegue completado"
+                                    $null = Read-host "Presiona una tecla para continuar"
+                                }
+                            }
+                            else {
+                                write-host "Seleccionando opcion default [1] No instalar navegador"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+
+                            $host.UI.RawUI.windowTitle = "Windows 7 Setup Assistant (Step 4/4 | 7zip Setup)"
+                            write-host "7zip Setup"
+                            write-host "------------------------"
+                            write-host "[1] No instalar 7zip"
+                            write-host "[2] Desplegar 7zip"
+                            $sevenzip = Read-host "Selecciona una opcion"
+                            if ($sevenzip -eq 1) {
+                                write-host "No se desplegara 7zip"
+                            }
+                            elseif ($sevenzip -eq 2) {
+                                # Descargar 7zip para WIndows 7
+                                write-host "Descargando 7zip"
+                                Invoke-WebRequest -uri "https://www.7-zip.org/a/7z1900-x64.exe" -OutFile "7z1900-x64.exe"
+                                if (-not($?)) {
+                                    Write-Warning "Error al descargar 7zip"
+                                    write-host "Omitiendo Despliege"
+                                }
+                                else {
+                                    write-host "Descarga completada"
+                                    write-host "Desplegando 7zip"
+                                    Start-Process -FilePath ".\7z1900-x64.exe"  -Wait
+                                    write-host "Despliegue completado"
+                                    $null = Read-host "Presiona una tecla para continuar"
+                                }
+                            }
+                            else {
+                                write-host "Seleccionando opcion default [1] No instalar 7zip"
+                                $null = read-host "Presiona cualquier tecla para continuar"
+                            }
+
+                            write-host "Asistente de configuracion de Windows 7 finalizado" -ForegroundColor Green
+                            $null = "Presiona cualquier tecla para salir del asistente"
+                            break
                         }
                         2 {
                             # Setup Assistant for new Windows 10/11 Installations
