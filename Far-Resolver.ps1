@@ -413,14 +413,7 @@ try {
                     switch ($selection) {
                         1 {
                             Clear-Host
-                            <# Desplegar Cofiguracion inicial WIndows 7
 
-1- Ofrecer activacion del sistema
-2- Ofrecer desplegamiento de Office
-3- Desplegar Navegador Chrome (A eleccion)
-4- Desplegar 7zip (A eleccion)
-
-#>
 
                             $host.UI.RawUI.WindowTitle = "Windows 7 Setup Assistant (Check Information"
 
