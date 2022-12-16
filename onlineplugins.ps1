@@ -17,7 +17,12 @@ $pluginsurlraw2 = "https://github.com/contratop/Far-Resolver/raw/main/plugins/De
 # Plugin 3 (Admin Downgrader)
 $pluginname3 = "Admin Downgrader"
 $pluginsauthor3 = "@ContratopDev"
-$pluginsurlraw3 = "https://github.com/contratop/Far-Resolver/raw/main/plugins/AdminDowngrader.ps1Not Set" # PENDING SETTING
+$pluginsurlraw3 = "https://github.com/contratop/Far-Resolver/raw/main/plugins/AdminDowngrader.ps1" # PENDING SETTING
+
+# Plugin 4 (Power Downloader)
+$pluginname4 = "Power Downloader"
+$pluginsauthor4 = "@ContratopDev"
+$pluginsurlraw4 = "https://github.com/contratop/PowerDownloader" # PENDING SETTING
 
 
 
