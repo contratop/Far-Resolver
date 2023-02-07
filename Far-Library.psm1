@@ -497,44 +497,96 @@ function activatekms {
     }
     else {
         write-host "Parametro invalido" -ForegroundColor Red
-        write-host "Contacte al desarrollador"
+        write-host "Parametros disponibles:"
+        write-host "Classic"
+        write-host "Legacy"
+        write-host "OEM"
     }
 }
 
 # Separador de funciones ################################################################################
 
 function deployoffice {
-    if (test-path -path cache\office) {
-        write-host "Eliminando cache de office"
-        remove-item -path cache\office -recurse -force
+    param($officemode)
+    # Modos disponibles: Classic, Deployer
+    if($officemode -eq "Classic"){
+        write-host "Checking for Office 2016 Setup in Memory..."
+        if(Test-Path -path "files/office/setup.exe"){
+            Write-Host "Office Setup Detected" -ForegroundColor Green
+            $officeinmemory = $true
+        }
+        else{
+            Write-Host "Office Setup Not Detected" -ForegroundColor Red
+            $officeinmemory = $false
+        }
+        if($officeinmemory -eq $true){
+            write-host "Starting Setup..."
+            Start-Process /files/office/
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            setup.exe -Wait
+            write-host "Setup finished"
+        }
+        else{
+            write-host "Downloading Office 2016 Setup"
+            mkdir cache\office
+            Invoke-WebRequest -uri "INSERTARLINKAQUI" -OutFile cache\office\officesetup.exe
+            write-host "Starting Setup..."
+            Start-Process /cache/office/officesetup.exe -Wait
+            write-host "Setup finished"
+        }
+
+
+
     }
-    write-host "Descargando Office Deployer"
-    mkdir cache\office
-    Invoke-WebRequest -uri "https://github.com/asheroto/Deploy-Office/releases/latest/download/Deploy-Office.exe" -OutFile cache\office\Deploy-Office.exe
-    if (-not($?)) {
-        write-host "Error al descargar Deploy-Office.exe"
-        write-host "Descarguelo manualmente"
-        write-host "https://github.com/asheroto/Deploy-Office/releases/latest/download/Deploy-Office.exe"
-        $null = read-host "Presione enter para continuar"
+    elseif ($officemode -eq "Deployer") {
+            if (test-path -path cache\office) {
+                write-host "Eliminando cache de office"
+                remove-item -path cache\office -recurse -force
+            }
+            write-host "Descargando Office Deployer"
+            mkdir cache\office
+            Invoke-WebRequest -uri "https://github.com/asheroto/Deploy-Office/releases/latest/download/Deploy-Office.exe" -OutFile cache\office\Deploy-Office.exe
+            if (-not($?)) {
+                write-host "Error al descargar Deploy-Office.exe"
+                write-host "Descarguelo manualmente"
+                write-host "https://github.com/asheroto/Deploy-Office/releases/latest/download/Deploy-Office.exe"
+                $null = read-host "Presione enter para continuar"
+            }
+            write-host "Ejecutando Office Deployer"
+            start-process -filepath cache\office\Deploy-Office.exe
+            $null = read-host "Script finalizado, presione enter para limpiar cache y finalizar"
+            write-host "Eliminando cache de office"
+            remove-item -path cache -recurse -force
+            if (-not($?)) {
+                write-warning "Error al eliminar cache de office"
+                write-host "Eliminelos manualmente"
+            }
+            else {
+                write-host "Cache eliminada correctamente" -ForegroundColor Green
+            }
+            write-host ""
+            $prompt = "Deseas activar Office? [activate]"
+            if ($prompt -eq "activate") {
+                activatekms
+            }
+            write-host ""
     }
-    write-host "Ejecutando Office Deployer"
-    start-process -filepath cache\office\Deploy-Office.exe
-    $null = read-host "Script finalizado, presione enter para limpiar cache y finalizar"
-    write-host "Eliminando cache de office"
-    remove-item -path cache -recurse -force
-    if (-not($?)) {
-        write-warning "Error al eliminar cache de office"
-        write-host "Eliminelos manualmente"
+    else{
+        write-host "Modo invalido" -ForegroundColor Red
+        write-host "Modos disponibles:"
+        write-host "Classic"
+        write-host "Deployer"
     }
-    else {
-        write-host "Cache eliminada correctamente" -ForegroundColor Green
-    }
-    write-host ""
-    $prompt = "Deseas activar Office? [activate]"
-    if ($prompt -eq "activate") {
-        activatekms
-    }
-    write-host ""
 }
 
 
@@ -731,7 +783,7 @@ function individualrepair {
 
 
 
-function getcommand {
+function farshelp {
     Get-Command -Module Far-Library
 }
 
