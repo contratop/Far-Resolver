@@ -1,6 +1,7 @@
 Write-host "Far-Library cargado correctamente" -ForegroundColor Green
 $farlibraryver = "0.4.4"
 $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+$script:OSVersion = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
 
 
 
@@ -27,7 +28,67 @@ $script:architectureproc = (Get-WmiObject -Class Win32_ComputerSystem).SystemTyp
 
 
 
-
+function checkfarintegrity{
+    # Check Admin
+    $elevated = ([Security.Principal.WindowsPrincipal] `
+    [Security.Principal.WindowsIdentity]::GetCurrent()
+    ).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    if ($elevated -eq $true){
+        Write-Host "Elevated: Yes" -ForegroundColor Green
+        $Global:CheckElevated = $true
+    }
+    else{
+        write-warning "Elevated: No"
+        $Global:CheckElevated = $false
+    }
+    # Check Admin End
+    # Check OS
+    if ($OSVersion -match "Windows"){
+        Write-Host "Windows Detected" -ForegroundColor Green
+        $Global:CheckOS = $true
+    }
+    else{
+        Write-Warning "Windows not detected (Linux?)"
+        $Global:CheckOS = $false
+    }
+    # Check OS End
+    #Check Architecture
+    if ($architectureproc -match "64"){
+        Write-Host "Architecture: 64-bit" -ForegroundColor Green
+        $Global:CheckArchitecture = $true
+    }
+    else{
+        write-host "Architecture: $architectureproc"
+        Write-Warning "Architecture: 32-bit or not detected"
+        $Global:CheckArchitecture = $false
+    }
+    #Detect git
+    if (Get-Command git -ErrorAction SilentlyContinue) {
+        Write-Host "Git detected" -ForegroundColor Green
+        $Global:CheckGit = $true
+    }
+    else {
+        Write-Warning "Git not detected"
+        $Global:CheckGit = $false
+    }
+    #Detect git end
+    #Detect Winget
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        Write-Host "Winget detected" -ForegroundColor Green
+        $Global:CheckWinget = $true
+    }
+    else {
+        Write-Warning "Winget not detected"
+        $Global:CheckWinget = $false
+    }
+    #Detect Winget End
+    #VariableList
+    #** $CheckElevated - $true or $false
+    #** $CheckOS - $true (Windows) / $false (Not Windows)
+    #** $CheckArchitecture - $true (64-bit) / $false (32-bit or not detected)
+    #** $CheckGit - $true (Git detected) / $false (Git not detected)
+    #** $CheckWinget - $true (Winget detected) / $false (Winget not detected)
+}
 
 
 
