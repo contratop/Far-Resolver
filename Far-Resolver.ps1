@@ -402,11 +402,11 @@ try {
             3 {
                 $whileselectos = $true
                 while ($whileselectos) {
-                    claer-host
+                    clear-host
                     write-host "Elige sistema operativo Target"
                     write-host "---------------------------------"
-                    write-host "[1] Windows 7 o inferior"
-                    write-host "[2] Windows 10 o superior"
+                    write-host "[1] Windows 8 7 o inferior"
+                    write-host "[2] Windows 8.1 10 o superior"
                     write-host ""
                     write-host "[X] Volver a Menu Principal"
                     $selection = read-host "Selecciona una opcion"

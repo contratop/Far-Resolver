@@ -537,12 +537,7 @@ function deployoffice {
             write-host "Setup finished"
         }
         else{
-            write-host "Downloading Office 2016 Setup"
-            mkdir cache\office
-            Invoke-WebRequest -uri "INSERTARLINKAQUI" -OutFile cache\office\officesetup.exe
-            write-host "Starting Setup..."
-            Start-Process /cache/office/officesetup.exe -Wait
-            write-host "Setup finished"
+            write-host "Office not detected in Memory" -ForegroundColor Yellow
         }
 
 
