@@ -7,7 +7,7 @@ $script:OSVersion = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT
 
 
 
-
+# Comentado desde VSCode usando Oculus Quest 2 Standalone
 
 
 
